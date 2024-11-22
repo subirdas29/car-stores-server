@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 export type TCar = {
   brand: string;
   model: string;
@@ -10,3 +12,7 @@ export type TCar = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+export interface CarModel extends Model<TCar> {
+  updateCar(carId: string, quantity: number): Promise<TCar | null>;
+}
