@@ -35,6 +35,7 @@ const carSchema = new Schema<TCar>(
     quantity: {
       type: Number,
       required: [true, 'Quantity is required'],
+      min: [1, 'Please added quantity'],
     },
     isStock: {
       type: Boolean,
