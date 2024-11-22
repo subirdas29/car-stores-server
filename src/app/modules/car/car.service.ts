@@ -14,8 +14,29 @@ const allCarsDetails = async () => {
 };
 
 // Get a Specific Car
+const oneCarDetails = async (id: string) => {
+  const result = await Car.findById(id);
+  return result;
+};
+
+// Update a Specific Car
+const carUpdate = async (id: string, data: Partial<TCar>) => {
+  const result = await Car.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+  return result;
+};
+
+// Delete a Car
+const carDelete = async (id: string) => {
+  const result = await Car.findByIdAndDelete(id);
+  return result;
+};
 
 export const carServices = {
   createCarDetailsIntoDB,
   allCarsDetails,
+  oneCarDetails,
+  carUpdate,
+  carDelete,
 };
