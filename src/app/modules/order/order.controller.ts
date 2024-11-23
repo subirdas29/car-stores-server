@@ -18,7 +18,7 @@ const createOrderController = async (req: Request, res: Response) => {
     {
       res.status(500).json({
         success: false,
-        message:'Something went wrong',
+        message: 'Something went wrong',
         error: err,
       });
     }
