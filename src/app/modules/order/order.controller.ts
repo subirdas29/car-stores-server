@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { OrderDetails } from './order.service';
+import { orderSchemaValidation } from './order.validation';
 
 const createOrderController = async (req: Request, res: Response) => {
   try {
     const orderDetails = req.body;
-    const result = await OrderDetails.orderACar(orderDetails);
+    const zodParseData = orderSchemaValidation.parse(orderDetails);
+    const result = await OrderDetails.orderACar(zodParseData);
 
     res.status(200).json({
       success: true,
@@ -16,7 +18,7 @@ const createOrderController = async (req: Request, res: Response) => {
     {
       res.status(500).json({
         success: false,
-        message: err.message || 'Something went wrong',
+        message:'Something went wrong',
         error: err,
       });
     }
