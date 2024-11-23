@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { carServices } from './car.service';
+import carSchemaValidation from './car.validation';
 
 //Create a CarController
 const carCreateController = async (req: Request, res: Response) => {
   try {
     const carDetails = req.body;
-    const result = await carServices.createCarDetailsIntoDB(carDetails);
+
+    const zodParseData = carSchemaValidation.parse(carDetails);
+
+    const result = await carServices.createCarDetailsIntoDB(zodParseData);
 
     res.status(200).json({
       success: true,
@@ -17,7 +21,7 @@ const carCreateController = async (req: Request, res: Response) => {
     {
       res.status(500).json({
         success: false,
-        message: err.message || 'Something went wrong',
+        message: 'Something went wrong',
         error: err,
       });
     }

@@ -25,4 +25,11 @@ const orderSchema = new Schema<TOrder>(
   },
 );
 
+orderSchema.pre('save', function (next) {
+  if (this.quantity > 0) {
+    this.totalPrice = this.quantity * this.totalPrice;
+  }
+  next();
+});
+
 export const Order = model<TOrder>('Order', orderSchema);

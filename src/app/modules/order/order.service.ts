@@ -10,7 +10,10 @@ const orderACar = async (orderData: TOrder) => {
 };
 
 const orderRevenue = async () => {
-  const result = await Order.find();
+  const result = await Order.aggregate([
+    { $group: { _id: '$Order._id', totalRevenue: { $sum: '$totalPrice' } } },
+    { $project: { totalRevenue: 1 } },
+  ]);
   return result;
 };
 
