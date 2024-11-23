@@ -11,12 +11,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_service_1 = require("./order.service");
-const order_validation_1 = require("./order.validation");
 const createOrderController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderDetails = req.body;
-        const zodParseData = order_validation_1.orderSchemaValidation.parse(orderDetails);
-        const result = yield order_service_1.OrderDetails.orderACar(zodParseData);
+        const result = yield order_service_1.OrderDetails.orderACar(orderDetails);
         res.status(200).json({
             success: true,
             message: 'Order created successfully',
@@ -24,11 +22,27 @@ const createOrderController = (req, res) => __awaiter(void 0, void 0, void 0, fu
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
-                message: 'Something went wrong',
-                error: err,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
+                message: err.message || 'Something went wrong',
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }
@@ -43,11 +57,27 @@ const ordersRevenueController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
                 message: err.message || 'Something went wrong',
-                error: err,
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }

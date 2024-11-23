@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarController = void 0;
 const car_service_1 = require("./car.service");
-const car_validation_1 = __importDefault(require("./car.validation"));
+// import carSchemaValidation from './car.validation';
 //Create a CarController
 const carCreateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carDetails = req.body;
-        const zodParseData = car_validation_1.default.parse(carDetails);
-        const result = yield car_service_1.carServices.createCarDetailsIntoDB(zodParseData);
+        const result = yield car_service_1.carServices.createCarDetailsIntoDB(carDetails);
         res.status(200).json({
             success: true,
             message: 'Car created successfully',
@@ -28,11 +24,27 @@ const carCreateController = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
-                message: 'Something went wrong',
-                error: err,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
+                message: err.message || 'Something went wrong',
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }
@@ -48,11 +60,27 @@ const allCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
                 message: err.message || 'Something went wrong',
-                error: err,
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }
@@ -69,11 +97,27 @@ const oneCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
                 message: err.message || 'Something went wrong',
-                error: err,
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }
@@ -91,11 +135,27 @@ const carUpdateController = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
                 message: err.message || 'Something went wrong',
-                error: err,
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }
@@ -112,11 +172,27 @@ const deleteCarController = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        {
-            res.status(500).json({
+        if (err.name === 'ValidationError') {
+            res.status(400).json({
+                message: 'Validation failed',
                 success: false,
+                error: {
+                    name: err.name,
+                    errors: err.errors,
+                },
+                stack: err.stack,
+            });
+        }
+        else {
+            // For other types of errors
+            res.status(500).json({
                 message: err.message || 'Something went wrong',
-                error: err,
+                success: false,
+                error: {
+                    name: err.name,
+                    message: err.message,
+                    stack: err.stack,
+                },
             });
         }
     }

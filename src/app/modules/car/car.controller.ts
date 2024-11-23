@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { carServices } from './car.service';
-import carSchemaValidation from './car.validation';
+// import carSchemaValidation from './car.validation';
 
 //Create a CarController
 const carCreateController = async (req: Request, res: Response) => {
   try {
     const carDetails = req.body;
 
-    const zodParseData = carSchemaValidation.parse(carDetails);
-
-    const result = await carServices.createCarDetailsIntoDB(zodParseData);
+    const result = await carServices.createCarDetailsIntoDB(carDetails);
 
     res.status(200).json({
       success: true,
@@ -18,11 +16,26 @@ const carCreateController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
-        message: 'Something went wrong',
-        error: err,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
+        message: err.message || 'Something went wrong',
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
@@ -39,11 +52,26 @@ const allCarDetailsController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
         message: err.message || 'Something went wrong',
-        error: err,
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
@@ -61,11 +89,26 @@ const oneCarDetailsController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
         message: err.message || 'Something went wrong',
-        error: err,
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
@@ -84,11 +127,26 @@ const carUpdateController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
         message: err.message || 'Something went wrong',
-        error: err,
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
@@ -106,11 +164,26 @@ const deleteCarController = async (req: Request, res: Response) => {
       result: {},
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
         message: err.message || 'Something went wrong',
-        error: err,
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }

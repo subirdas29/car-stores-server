@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { OrderDetails } from './order.service';
-import { orderSchemaValidation } from './order.validation';
 
 const createOrderController = async (req: Request, res: Response) => {
   try {
     const orderDetails = req.body;
-    const zodParseData = orderSchemaValidation.parse(orderDetails);
-    const result = await OrderDetails.orderACar(zodParseData);
+    const result = await OrderDetails.orderACar(orderDetails);
 
     res.status(200).json({
       success: true,
@@ -15,11 +13,26 @@ const createOrderController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
-        message: 'Something went wrong',
-        error: err,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
+        message: err.message || 'Something went wrong',
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
@@ -35,11 +48,26 @@ const ordersRevenueController = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err: any) {
-    {
-      res.status(500).json({
+    if (err.name === 'ValidationError') {
+      res.status(400).json({
+        message: 'Validation failed',
         success: false,
+        error: {
+          name: err.name,
+          errors: err.errors,
+        },
+        stack: err.stack,
+      });
+    } else {
+      // For other types of errors
+      res.status(500).json({
         message: err.message || 'Something went wrong',
-        error: err,
+        success: false,
+        error: {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        },
       });
     }
   }
