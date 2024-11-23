@@ -16,6 +16,9 @@ const allCarsDetails = async () => {
 // Get a Specific Car
 const oneCarDetails = async (id: string) => {
   const result = await Car.findById(id);
+  if (!result) {
+    throw { name: 'NotFoundError', message: 'Car not found' };
+  }
   return result;
 };
 
@@ -24,12 +27,18 @@ const carUpdate = async (id: string, data: Partial<TCar>) => {
   const result = await Car.findByIdAndUpdate(id, data, {
     new: true,
   });
+  if (!result) {
+    throw { name: 'NotFoundError', message: 'Car not found' };
+  }
   return result;
 };
 
 // Delete a Car
 const carDelete = async (id: string) => {
   const result = await Car.findByIdAndDelete(id);
+  if (!result) {
+    throw { name: 'NotFoundError', message: 'Car not found' };
+  }
   return result;
 };
 

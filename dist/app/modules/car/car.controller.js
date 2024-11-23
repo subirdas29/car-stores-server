@@ -11,8 +11,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarController = void 0;
 const car_service_1 = require("./car.service");
-// import carSchemaValidation from './car.validation';
-//Create a CarController
+// Centralized error handler for Validation and Not Found errors
+const handleControllerError = (err, res) => {
+    if (err.name === 'ValidationError') {
+        // Handle validation errors
+        return res.status(400).json({
+            success: false,
+            message: 'Validation failed',
+            error: {
+                name: err.name,
+                errors: err.errors, // Detailed errors
+            },
+            stack: err.stack,
+        });
+    }
+    else if (err.name === 'NotFoundError') {
+        // Handle not found errors
+        return res.status(404).json({
+            success: false,
+            message: err.message || 'Resource not found',
+            error: {
+                name: err.name,
+            },
+        });
+    }
+    else {
+        // Handle other types of errors
+        return res.status(500).json({
+            success: false,
+            message: err.message || 'Something went wrong',
+            error: {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+            },
+        });
+    }
+};
+// Create a CarController
 const carCreateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carDetails = req.body;
@@ -24,29 +60,7 @@ const carCreateController = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
 // Get All CarsController
@@ -60,36 +74,17 @@ const allCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
-// Get One CarsController
+// Get One CarController
 const oneCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carId = req.params.carId;
         const result = yield car_service_1.carServices.oneCarDetails(carId);
+        if (!result) {
+            throw { name: 'NotFoundError', message: 'Car not found' }; // Throw 404 error
+        }
         res.status(200).json({
             success: true,
             message: 'Car retrieved successfully',
@@ -97,37 +92,18 @@ const oneCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
-//Update a CarController
+// Update a CarController
 const carUpdateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carId = req.params.carId;
         const carData = req.body;
         const result = yield car_service_1.carServices.carUpdate(carId, carData);
+        if (!result) {
+            throw { name: 'NotFoundError', message: 'Car not found for update' };
+        }
         res.status(200).json({
             success: true,
             message: 'Car updated successfully',
@@ -135,66 +111,24 @@ const carUpdateController = (req, res) => __awaiter(void 0, void 0, void 0, func
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
-//Delete CarController
+// Delete CarController
 const deleteCarController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carId = req.params.carId;
-        yield car_service_1.carServices.carDelete(carId);
+        const result = yield car_service_1.carServices.carDelete(carId);
+        if (!result) {
+            throw { name: 'NotFoundError', message: 'Car not found for deletion' };
+        }
         res.status(200).json({
             success: true,
             message: 'Car deleted successfully',
-            result: {},
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
 exports.CarController = {

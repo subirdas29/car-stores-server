@@ -24,6 +24,9 @@ const allCarsDetails = () => __awaiter(void 0, void 0, void 0, function* () {
 // Get a Specific Car
 const oneCarDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield car_model_1.Car.findById(id);
+    if (!result) {
+        throw { name: 'NotFoundError', message: 'Car not found' };
+    }
     return result;
 });
 // Update a Specific Car
@@ -31,11 +34,17 @@ const carUpdate = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield car_model_1.Car.findByIdAndUpdate(id, data, {
         new: true,
     });
+    if (!result) {
+        throw { name: 'NotFoundError', message: 'Car not found' };
+    }
     return result;
 });
 // Delete a Car
 const carDelete = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield car_model_1.Car.findByIdAndDelete(id);
+    if (!result) {
+        throw { name: 'NotFoundError', message: 'Car not found' };
+    }
     return result;
 });
 exports.carServices = {

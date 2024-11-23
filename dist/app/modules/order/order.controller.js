@@ -11,6 +11,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_service_1 = require("./order.service");
+// Centralized error handler for Validation and Not Found errors
+const handleControllerError = (err, res) => {
+    if (err.name === 'ValidationError') {
+        // Handle validation errors
+        return res.status(400).json({
+            success: false,
+            message: 'Validation failed',
+            error: {
+                name: err.name,
+                errors: err.errors,
+            },
+            stack: err.stack,
+        });
+    }
+    else if (err.message === 'Car not found') {
+        // Handle not found errors
+        return res.status(404).json({
+            success: false,
+            message: err.message || 'Not found',
+            error: {
+                name: err.name,
+            },
+        });
+    }
+    else {
+        // Handle other types of errors
+        return res.status(500).json({
+            success: false,
+            message: err.message || 'Something went wrong',
+            error: {
+                name: err.name,
+                message: err.message,
+                stack: err.stack,
+            },
+        });
+    }
+};
+// Create Order Controller
 const createOrderController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orderDetails = req.body;
@@ -22,31 +60,10 @@ const createOrderController = (req, res) => __awaiter(void 0, void 0, void 0, fu
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
+// Calculate Revenue Controller
 const ordersRevenueController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield order_service_1.OrderDetails.orderRevenue();
@@ -57,29 +74,7 @@ const ordersRevenueController = (req, res) => __awaiter(void 0, void 0, void 0, 
         });
     }
     catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({
-                message: 'Validation failed',
-                success: false,
-                error: {
-                    name: err.name,
-                    errors: err.errors,
-                },
-                stack: err.stack,
-            });
-        }
-        else {
-            // For other types of errors
-            res.status(500).json({
-                message: err.message || 'Something went wrong',
-                success: false,
-                error: {
-                    name: err.name,
-                    message: err.message,
-                    stack: err.stack,
-                },
-            });
-        }
+        handleControllerError(err, res);
     }
 });
 exports.OrderController = {
