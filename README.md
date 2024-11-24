@@ -8,41 +8,40 @@ A robust and scalable RESTful API built with Node.js, Express.js, TypeScript, an
 
 https://car-stores-server.vercel.app/
 
-## Features
+## Features:
 
-- 🚗 Car Management: Create, update, delete, and fetch car data.
-- 📦 Inventory Tracking: Manage car stock dynamically based on orders.
-- 💾 Database Integration: Uses MongoDB with Mongoose for schema management.
-- 🔧 Middleware Logic: Automatic stock status updates (isStock) based on inventory.
-- 📜 Validation: Comprehensive input validation with custom error messages.
+- 🚗 **Car Management**: Create, update, delete, and fetch car data.
+- 📦 **Inventory Tracking**: Manage car stock dynamically based on orders.
+- 💾 **Database Integration**: Uses MongoDB with Mongoose for schema management.
+- 🔧 **Middleware Logic**: Automatic stock status updates (isStock) based on inventory.
+- 📜 **Validation**: Comprehensive input validation with custom error messages.
+- 🌐 **RESTful Design**: Clean, modular, and scalable API architecture.
 
-- 🌐 RESTful Design: Clean, modular, and scalable API architecture.
+## Technologies Used:
 
-## Technologies Used
+- **Node.js**: JavaScript runtime for server-side applications.
+- **Express.js**: Lightweight web framework for building REST APIs.
+- **TypeScript**: Strongly-typed JavaScript for enhanced development experience.
+- **Mongoose**: MongoDB ODM for schema validation and query building.
+- **ESLint & Prettier**: Code quality and formatting tools.
 
-- Node.js: JavaScript runtime for server-side applications.
-- Express.js: Lightweight web framework for building REST APIs.
-- TypeScript: Strongly-typed JavaScript for enhanced development experience.
-- Mongoose: MongoDB ODM for schema validation and query building.
-- ESLint & Prettier: Code quality and formatting tools.
+## API Endpoints:
 
-## API Endpoints
+### Car Routes:
 
-### Car Routes
+- **POST /api/cars**: Create a new car.
+- **GET /api/cars**: Retrieve all cars.
+- **GET /api/cars/**:carId: Retrieve a single car by ID.
+- **PUT /api/cars/**:carId: Update car details.
+- **DELETE /api/cars/**:carId: Delete a car.
 
-- POST /api/cars: Create a new car.
-- GET /api/cars: Retrieve all cars.
-- GET /api/cars/:carId: Retrieve a single car by ID.
-- PUT /api/cars/:carId: Update car details.
-- DELETE /api/cars/:carId: Delete a car.
+### Order Routes:
 
-### Order Routes
+- **POST /api/orders**: Place a new car order.Reduces car quantity and updates isStock status automatically.
+- **GET /api/orders/revenue**: Retrieve all orders.
 
-- POST /api/orders: Place a new car order.Reduces car quantity and updates isStock status automatically.
-- GET /api/orders/revenue: Retrieve all orders.
+## Best Practices:
 
-## Best Practices
-
-- Error Handling: Centralized error handling ensures consistent responses.
-- Validation: Input validation ensures only valid data is accepted.
-- Modular Design: Separation of concerns for scalability and maintainability.
+- **Error Handling**: Centralized error handling ensures consistent responses.
+- **Validation**: Input validation ensures only valid data is accepted.
+- **Modular Design**: Separation of concerns for scalability and maintainability.
