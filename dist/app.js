@@ -10,12 +10,12 @@ const order_routes_1 = require("./app/modules/order/order.routes");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-app.use('/api/cars', car_routes_1.CarRoutes);
-app.use('/api/orders', order_routes_1.OrderRoutes);
 app.get('/', (req, res) => {
     res.send({
         status: true,
         message: 'Server Live',
     });
 });
+app.use('/api/cars', car_routes_1.CarRoutes);
+app.use('/api/orders', order_routes_1.OrderRoutes);
 exports.default = app;
