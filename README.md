@@ -1,7 +1,5 @@
 # Car-Stores-Server
 
-## Objective:
-
 A robust and scalable RESTful API built with Node.js, Express.js, TypeScript, and Mongoose. This project provides functionalities for managing a car inventory system, including car creation, updating, ordering, and real-time stock management.
 
 ## Live URL:
@@ -31,9 +29,9 @@ https://car-stores-server.vercel.app/
 
 - **POST /api/cars**: Create a new car.
 - **GET /api/cars**: Retrieve all cars.
-- **GET /api/cars/**:carId: Retrieve a single car by ID.
-- **PUT /api/cars/**:carId: Update car details.
-- **DELETE /api/cars/**:carId: Delete a car.
+- **GET /api/cars/:carId**: Retrieve a single car by ID.
+- **PUT /api/cars/:carId**: Update car details.
+- **DELETE /api/cars/:carId**: Delete a car.
 
 ### Order Routes:
 
