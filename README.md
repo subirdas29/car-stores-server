@@ -4,7 +4,7 @@ A robust and scalable RESTful API built with Node.js, Express.js, TypeScript, an
 
 ## Live URL:
 
-https://car-stores-server.vercel.app/
+https://car-stores-api.vercel.app/
 
 ## Features:
 
