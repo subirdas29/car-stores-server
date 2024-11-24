@@ -24,7 +24,6 @@ https://car-stores-server.vercel.app/
 - Express.js: Lightweight web framework for building REST APIs.
 - TypeScript: Strongly-typed JavaScript for enhanced development experience.
 - Mongoose: MongoDB ODM for schema validation and query building.
-
 - ESLint & Prettier: Code quality and formatting tools.
 
 ## API Endpoints
