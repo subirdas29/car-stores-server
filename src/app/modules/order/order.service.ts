@@ -9,6 +9,19 @@ const orderACar = async (orderData: TOrder) => {
   return result;
 };
 
+// Get All Orders
+const allOrdersDetails = async () => {
+  const result = await Car.find();
+  return result;
+};
+
+// Get a Specific Order
+const oneOrderDetails = async (id: string) => {
+  const result = await Car.findById(id);
+  return result;
+};
+
+
 const orderRevenue = async () => {
   const result = await Order.aggregate([
     { $group: { _id: '$Order._id', totalRevenue: { $sum: '$totalPrice' } } },
@@ -17,7 +30,9 @@ const orderRevenue = async () => {
   return result;
 };
 
-export const OrderDetails = {
+export const OrderServices = {
   orderACar,
   orderRevenue,
+  allOrdersDetails,
+  oneOrderDetails
 };

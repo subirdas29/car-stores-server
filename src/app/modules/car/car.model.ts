@@ -3,6 +3,7 @@ import { CarModel, TCar } from './car.interface';
 
 const carSchema = new Schema<TCar, CarModel>(
   {
+    
     brand: {
       type: String,
       required: [true, 'Brand Name is required'],

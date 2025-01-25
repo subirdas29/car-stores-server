@@ -1,76 +1,69 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
-import { OrderDetails } from './order.service';
 
-// Centralized error handler for Validation and Not Found errors
-const handleControllerError = (err: any, res: Response) => {
-  if (err.name === 'ValidationError') {
-    // Handle validation errors
-    return res.status(400).json({
-      success: false,
-      message: 'Validation failed',
-      error: {
-        name: err.name,
-        errors: err.errors,
-      },
-      stack: err.stack,
-    });
-  } else if (err.message === 'Car not found') {
-    // Handle not found errors
-    return res.status(404).json({
-      success: false,
-      message: err.message || 'Not found',
-      error: {
-        name: err.name,
-      },
-    });
-  } else {
-    // Handle other types of errors
-    return res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: {
-        name: err.name,
-        message: err.message,
-        stack: err.stack,
-      },
-    });
-  }
-};
+import { OrderServices } from './order.service';
+import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
+import httpStatus from 'http-status';
+
+
+
 
 // Create Order Controller
-const createOrderController = async (req: Request, res: Response) => {
-  try {
-    const orderDetails = req.body;
+const createOrderController = catchAsync(async (req, res) => {
+  
+  const result = await OrderServices.orderACar(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Order is created successfully',
+    data: result,
+  });
+});
 
-    const result = await OrderDetails.orderACar(orderDetails);
+// Get All CarsController
+const getAllOrderController = catchAsync(async (req, res) => {
 
-    res.status(200).json({
-      success: true,
-      message: 'Order created successfully',
-      data: result,
-    });
-  } catch (err: any) {
-    handleControllerError(err, res);
-  }
-};
+  const result = await OrderServices.allOrdersDetails();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Orders fetched successfully",
+    data: result,
+  });
+});
+
+// Get One CarController
+const oneOrderDetailsController =
+catchAsync(async (req, res) => {
+  const orderId = req.params.orderId;
+  const result = await OrderServices.oneOrderDetails(orderId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Car fetched successfully",
+    data: result,
+  });
+});
+
+
 
 // Calculate Revenue Controller
-const ordersRevenueController = async (req: Request, res: Response) => {
-  try {
-    const result = await OrderDetails.orderRevenue();
+const ordersRevenueController =catchAsync(async (req, res) => {
 
-    res.status(200).json({
-      success: true,
-      message: 'Revenue calculated successfully',
-      data: result,
-    });
-  } catch (err: any) {
-    handleControllerError(err, res);
-  }
-};
+  const result = await OrderServices.orderRevenue();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Revenue calculated successfully',
+    data: result,
+  });
+});
+
+
 
 export const OrderController = {
   createOrderController,
   ordersRevenueController,
+  getAllOrderController,
+  oneOrderDetailsController
 };

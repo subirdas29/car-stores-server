@@ -2,7 +2,7 @@ import { TCar } from './car.interface';
 import { Car } from './car.model';
 
 //Create a Car
-const createCarDetailsIntoDB = async (carData: TCar) => {
+const createCar = async (carData: TCar) => {
   const result = await Car.create(carData);
   return result;
 };
@@ -42,8 +42,8 @@ const carDelete = async (id: string) => {
   return result;
 };
 
-export const carServices = {
-  createCarDetailsIntoDB,
+export const CarServices = {
+  createCar,
   allCarsDetails,
   oneCarDetails,
   carUpdate,
