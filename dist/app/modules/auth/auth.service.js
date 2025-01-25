@@ -24,7 +24,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
     }
     if (!(yield user_model_1.User.isThePasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password))) {
-        throw new AppError_1.default(http_status_1.default.FORBIDDEN, "password do not match");
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'password do not match');
     }
     const jwtPayload = {
         email: user === null || user === void 0 ? void 0 : user.email,
@@ -39,7 +39,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     if (!token) {
-        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, "You are not authorized");
+        throw new AppError_1.default(http_status_1.default.UNAUTHORIZED, 'You are not authorized');
     }
     const decoded = (0, auth_utils_1.verifyToken)(token, config_1.default.jwt_refresh_secret);
     const { email } = decoded;

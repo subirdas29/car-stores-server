@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,76 +9,59 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_service_1 = require("./order.service");
-// Centralized error handler for Validation and Not Found errors
-const handleControllerError = (err, res) => {
-    if (err.name === 'ValidationError') {
-        // Handle validation errors
-        return res.status(400).json({
-            success: false,
-            message: 'Validation failed',
-            error: {
-                name: err.name,
-                errors: err.errors,
-            },
-            stack: err.stack,
-        });
-    }
-    else if (err.message === 'Car not found') {
-        // Handle not found errors
-        return res.status(404).json({
-            success: false,
-            message: err.message || 'Not found',
-            error: {
-                name: err.name,
-            },
-        });
-    }
-    else {
-        // Handle other types of errors
-        return res.status(500).json({
-            success: false,
-            message: err.message || 'Something went wrong',
-            error: {
-                name: err.name,
-                message: err.message,
-                stack: err.stack,
-            },
-        });
-    }
-};
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const http_status_1 = __importDefault(require("http-status"));
 // Create Order Controller
-const createOrderController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const orderDetails = req.body;
-        const result = yield order_service_1.OrderDetails.orderACar(orderDetails);
-        res.status(200).json({
-            success: true,
-            message: 'Order created successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const createOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderServices.orderACar(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: 'Order is created successfully',
+        data: result,
+    });
+}));
+// Get All CarsController
+const getAllOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderServices.allOrdersDetails();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Orders fetched successfully",
+        data: result,
+    });
+}));
+// Get One CarController
+const oneOrderDetailsController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const orderId = req.params.orderId;
+    const result = yield order_service_1.OrderServices.oneOrderDetails(orderId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Car fetched successfully",
+        data: result,
+    });
+}));
 // Calculate Revenue Controller
-const ordersRevenueController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield order_service_1.OrderDetails.orderRevenue();
-        res.status(200).json({
-            success: true,
-            message: 'Revenue calculated successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const ordersRevenueController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderServices.orderRevenue();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Revenue calculated successfully',
+        data: result,
+    });
+}));
 exports.OrderController = {
     createOrderController,
     ordersRevenueController,
+    getAllOrderController,
+    oneOrderDetailsController
 };

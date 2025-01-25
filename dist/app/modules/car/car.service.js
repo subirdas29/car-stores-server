@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.carServices = void 0;
+exports.CarServices = void 0;
 const car_model_1 = require("./car.model");
 //Create a Car
-const createCarDetailsIntoDB = (carData) => __awaiter(void 0, void 0, void 0, function* () {
+const createCar = (carData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield car_model_1.Car.create(carData);
     return result;
 });
@@ -47,8 +47,8 @@ const carDelete = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
-exports.carServices = {
-    createCarDetailsIntoDB,
+exports.CarServices = {
+    createCar,
     allCarsDetails,
     oneCarDetails,
     carUpdate,

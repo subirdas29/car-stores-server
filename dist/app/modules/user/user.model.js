@@ -24,12 +24,12 @@ const userSchema = new mongoose_1.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
         required: true,
-        select: 0
+        select: 0,
     },
     role: {
         type: String,

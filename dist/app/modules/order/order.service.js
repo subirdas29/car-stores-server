@@ -9,12 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderDetails = void 0;
+exports.OrderServices = void 0;
 const car_model_1 = require("../car/car.model");
 const order_model_1 = require("./order.model");
 const orderACar = (orderData) => __awaiter(void 0, void 0, void 0, function* () {
     yield car_model_1.Car.updateCar(orderData.car, orderData.quantity);
     const result = yield order_model_1.Order.create(orderData);
+    return result;
+});
+// Get All Orders
+const allOrdersDetails = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield car_model_1.Car.find();
+    return result;
+});
+// Get a Specific Order
+const oneOrderDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield car_model_1.Car.findById(id);
     return result;
 });
 const orderRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,7 +34,9 @@ const orderRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
     ]);
     return result;
 });
-exports.OrderDetails = {
+exports.OrderServices = {
     orderACar,
     orderRevenue,
+    allOrdersDetails,
+    oneOrderDetails
 };

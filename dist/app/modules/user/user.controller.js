@@ -22,12 +22,12 @@ const registerUserController = (0, catchAsync_1.default)((req, res) => __awaiter
     const { _id, name, email } = result;
     (0, sendResponse_1.default)(res, {
         success: true,
-        message: "User registered successfully",
+        message: 'User registered successfully',
         statusCode: http_status_1.default.CREATED,
         data: {
             _id,
             name,
-            email
+            email,
         },
     });
 }));

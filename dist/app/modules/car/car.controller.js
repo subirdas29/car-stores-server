@@ -8,132 +8,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarController = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const http_status_1 = __importDefault(require("http-status"));
 const car_service_1 = require("./car.service");
-// Centralized error handler for Validation and Not Found errors
-const handleControllerError = (err, res) => {
-    if (err.name === 'ValidationError') {
-        // Handle validation errors
-        return res.status(400).json({
-            success: false,
-            message: 'Validation failed',
-            error: {
-                name: err.name,
-                errors: err.errors, // Detailed errors
-            },
-            stack: err.stack,
-        });
-    }
-    else if (err.name === 'NotFoundError') {
-        // Handle not found errors
-        return res.status(404).json({
-            success: false,
-            message: err.message || 'Resource not found',
-            error: {
-                name: err.name,
-            },
-        });
-    }
-    else {
-        // Handle other types of errors
-        return res.status(500).json({
-            success: false,
-            message: err.message || 'Something went wrong',
-            error: {
-                name: err.name,
-                message: err.message,
-                stack: err.stack,
-            },
-        });
-    }
-};
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 // Create a CarController
-const carCreateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const carDetails = req.body;
-        const result = yield car_service_1.carServices.createCarDetailsIntoDB(carDetails);
-        res.status(200).json({
-            success: true,
-            message: 'Car created successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const createCarController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield car_service_1.CarServices.createCar(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: 'Car is created successfully',
+        data: result,
+    });
+}));
 // Get All CarsController
-const allCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield car_service_1.carServices.allCarsDetails();
-        res.status(200).json({
-            success: true,
-            message: 'Cars retrieved successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const getAllCarController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield car_service_1.CarServices.allCarsDetails();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Cars fetched successfully",
+        data: result,
+    });
+}));
 // Get One CarController
-const oneCarDetailsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const carId = req.params.carId;
-        const result = yield car_service_1.carServices.oneCarDetails(carId);
-        if (!result) {
-            throw { name: 'NotFoundError', message: 'Car not found' }; // Throw 404 error
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Car retrieved successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const oneCarDetailsController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const carId = req.params.carId;
+    const result = yield car_service_1.CarServices.oneCarDetails(carId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Car fetched successfully",
+        data: result,
+    });
+}));
 // Update a CarController
-const carUpdateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const carId = req.params.carId;
-        const carData = req.body;
-        const result = yield car_service_1.carServices.carUpdate(carId, carData);
-        if (!result) {
-            throw { name: 'NotFoundError', message: 'Car not found for update' };
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Car updated successfully',
-            data: result,
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const carUpdateController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const carId = req.params.carId;
+    const carData = req.body;
+    const result = yield car_service_1.CarServices.carUpdate(carId, carData);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Car updated successfully",
+        data: result,
+    });
+}));
 // Delete CarController
-const deleteCarController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const carId = req.params.carId;
-        const result = yield car_service_1.carServices.carDelete(carId);
-        if (!result) {
-            throw { name: 'NotFoundError', message: 'Car not found for deletion' };
-        }
-        res.status(200).json({
-            success: true,
-            message: 'Car deleted successfully',
-        });
-    }
-    catch (err) {
-        handleControllerError(err, res);
-    }
-});
+const deleteCarController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const carId = req.params.carId;
+    const result = yield car_service_1.CarServices.carDelete(carId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Car deleted successfully",
+        data: result,
+    });
+}));
 exports.CarController = {
-    carCreateController,
-    allCarDetailsController,
+    createCarController,
+    getAllCarController,
     oneCarDetailsController,
     carUpdateController,
     deleteCarController,
