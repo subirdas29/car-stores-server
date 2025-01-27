@@ -37,6 +37,22 @@ const getAllUsers = catchAsync(async(req,res)=>{
   });
 })
 
+
+const getMyOrder = catchAsync(async (req, res) => {
+  const {email} = req.user;
+  const query = req.query
+  const result = await UserServices.getMyOrder(email,query);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'My Order is retrieved successfully',
+    meta:result.meta,
+    data: result.result,
+  });
+});
+
+
 const getMe = catchAsync(async (req, res) => {
   const { email, role } = req.user;
 
@@ -50,8 +66,13 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
+
+
+
+
 export const UserController = {
   registerUserController,
   getAllUsers,
+  getMyOrder,
   getMe
 };

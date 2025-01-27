@@ -5,24 +5,19 @@ const mongoose_1 = require("mongoose");
 const orderSchema = new mongoose_1.Schema({
     email: {
         type: String,
-        required: [true, 'Email is required'],
-        match: [/\S+@\S+\.\S+/, 'Invalid email format'],
-        trim: true,
+        required: true
     },
     car: {
-        type: String,
-        required: [true, 'Car is required'],
-        trim: true,
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Car',
     },
     quantity: {
         type: Number,
-        required: [true, 'Quantity is required'],
-        min: [1, 'Quantity must be at least 1'],
+        required: true
     },
     totalPrice: {
         type: Number,
-        required: [true, 'Total price is required'],
-        min: [0, 'Total price cannot be negative'],
+        required: true
     },
 }, {
     timestamps: true,

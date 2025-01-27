@@ -6,11 +6,9 @@ import catchAsync from '../../utils/catchAsync';
 import httpStatus from 'http-status';
 
 
-
-
 // Create Order Controller
 const createOrderController = catchAsync(async (req, res) => {
-  
+
   const result = await OrderServices.orderACar(req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

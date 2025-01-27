@@ -42,6 +42,18 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result.result,
     });
 }));
+const getMyOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.user;
+    const query = req.query;
+    const result = yield user_service_1.UserServices.getMyOrder(email, query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'My Order is retrieved successfully',
+        meta: result.meta,
+        data: result.result,
+    });
+}));
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, role } = req.user;
     const result = yield user_service_1.UserServices.getMe(email, role);
@@ -55,5 +67,6 @@ const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
 exports.UserController = {
     registerUserController,
     getAllUsers,
+    getMyOrder,
     getMe
 };

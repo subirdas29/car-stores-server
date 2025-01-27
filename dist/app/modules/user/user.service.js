@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const order_model_1 = require("../order/order.model");
 const user_constant_1 = require("./user.constant");
 const user_model_1 = require("./user.model");
 const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,6 +24,20 @@ const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
 // Get All Cars
 const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const userQuery = new QueryBuilder_1.default(user_model_1.User.find(), query)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .search(user_constant_1.userSearchableFields);
+    const result = yield userQuery.modelQuery;
+    const meta = yield userQuery.countTotal();
+    return {
+        result,
+        meta
+    };
+});
+const getMyOrder = (email, query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new QueryBuilder_1.default(order_model_1.Order.find({ email: email }).populate('car'), query)
         .filter()
         .sort()
         .paginate()
@@ -48,5 +63,5 @@ const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
 exports.UserServices = {
     registerUser,
     getAllUsers,
-    getMe
+    getMe, getMyOrder
 };

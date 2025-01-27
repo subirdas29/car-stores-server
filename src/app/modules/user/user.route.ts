@@ -24,4 +24,12 @@ router.get(
   UserController.getMe,
 );
 
+router.get(
+  '/my-order',
+  auth( USER_ROLES.admin, USER_ROLES.user),
+  UserController.getMyOrder,
+)
+
+
+
 export const UserRoutes = router;

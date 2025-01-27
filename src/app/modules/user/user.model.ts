@@ -1,7 +1,19 @@
 import { model, Schema } from 'mongoose';
-import { TUser, UserModel } from './user.interface';
+import { TMyOrders, TUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
+
+
+const myOrderSchema = new Schema<TMyOrders>({
+  orders: {
+    type: Schema.Types.ObjectId,
+    ref: 'Order', //eta nijer 7e nijer ref hyse
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const userSchema = new Schema<TUser, UserModel>({
   name: {
@@ -22,7 +34,17 @@ const userSchema = new Schema<TUser, UserModel>({
     type: String,
     default: 'user',
   },
-});
+  myorder:[myOrderSchema],
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+
+},
+{
+  timestamps: true,
+},
+);
 
 userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(
