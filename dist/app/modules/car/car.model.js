@@ -11,47 +11,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Car = void 0;
 const mongoose_1 = require("mongoose");
+const car_constant_1 = require("./car.constant");
 const carSchema = new mongoose_1.Schema({
     brand: {
         type: String,
-        required: [true, 'Brand Name is required'],
-        minlength: [2, 'Brand Name must be at least 2 characters long'],
-        trim: true,
+        required: true,
     },
     model: {
         type: String,
-        required: [true, 'Model Name is required'],
-        minlength: [1, 'Model Name must be at least 1 character long'],
-        trim: true,
+        required: true,
     },
     year: {
         type: Number,
-        required: [true, 'Year is required'],
-        min: [1886, 'Year must be after the invention of cars (1886)'],
-        max: [new Date().getFullYear(), 'Year cannot be in the future'],
+        required: true,
     },
     price: {
         type: Number,
-        required: [true, 'Price is required'],
-        min: [0, 'Price must be a positive number'],
+        required: true,
     },
     category: {
         type: String,
-        enum: {
-            values: ['Sedan', 'SUV', 'Truck', 'Coupe', 'Convertible'],
-            message: '{VALUE} is not a valid category. Valid categories are: Sedan, SUV, Truck, Coupe, Convertible',
-        },
+        required: true,
+        enum: car_constant_1.Category
     },
     description: {
         type: String,
-        required: [true, 'Description is required'],
-        minlength: [10, 'Description must be at least 10 characters long'],
-        trim: true,
+        required: true
     },
     quantity: {
         type: Number,
-        required: [true, 'Quantity is required'],
-        min: [0, 'Quantity must be at least 0'],
+        required: true
     },
     isStock: {
         type: Boolean,

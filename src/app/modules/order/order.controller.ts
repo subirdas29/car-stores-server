@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 import { OrderServices } from './order.service';
 import sendResponse from '../../utils/sendResponse';
@@ -22,13 +22,15 @@ const createOrderController = catchAsync(async (req, res) => {
 
 // Get All CarsController
 const getAllOrderController = catchAsync(async (req, res) => {
+  const query = req.query
 
-  const result = await OrderServices.allOrdersDetails();
+  const result = await OrderServices.allOrdersDetails(query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Orders fetched successfully",
-    data: result,
+    meta:result.meta,
+    data: result.result,
   });
 });
 

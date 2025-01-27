@@ -1,5 +1,4 @@
 "use strict";
-/* eslint-disable @typescript-eslint/no-explicit-any */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -30,12 +29,14 @@ const createOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(
 }));
 // Get All CarsController
 const getAllOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_service_1.OrderServices.allOrdersDetails();
+    const query = req.query;
+    const result = yield order_service_1.OrderServices.allOrdersDetails(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Orders fetched successfully",
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 }));
 // Get One CarController

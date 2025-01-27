@@ -1,11 +1,13 @@
 import { Model } from 'mongoose';
 
+export type TCategory = 'Sedan' | 'SUV' | 'Truck' | 'Coupe' | 'Convertible'
+
 export type TCar = {
   brand: string;
   model: string;
   year: number;
   price: number;
-  category: 'Sedan' | 'SUV' | 'Truck' | 'Coupe' | 'Convertible';
+  category: TCategory;
   description: string;
   quantity: number;
   isStock?: boolean | 'undefined';

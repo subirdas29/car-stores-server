@@ -31,6 +31,29 @@ const registerUserController = (0, catchAsync_1.default)((req, res) => __awaiter
         },
     });
 }));
+const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query;
+    const result = yield user_service_1.UserServices.getAllUsers(query);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Users fetched successfully",
+        meta: result.meta,
+        data: result.result,
+    });
+}));
+const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, role } = req.user;
+    const result = yield user_service_1.UserServices.getMe(email, role);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User is retrieved successfully',
+        data: result,
+    });
+}));
 exports.UserController = {
     registerUserController,
+    getAllUsers,
+    getMe
 };

@@ -8,8 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarServices = void 0;
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const car_constant_1 = require("./car.constant");
 const car_model_1 = require("./car.model");
 //Create a Car
 const createCar = (carData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -17,9 +22,19 @@ const createCar = (carData) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 // Get All Cars
-const allCarsDetails = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_model_1.Car.find();
-    return result;
+const allCarsDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const carQuery = new QueryBuilder_1.default(car_model_1.Car.find(), query)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .search(car_constant_1.carSearchableFields);
+    const result = yield carQuery.modelQuery;
+    const meta = yield carQuery.countTotal();
+    return {
+        result,
+        meta
+    };
 });
 // Get a Specific Car
 const oneCarDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {

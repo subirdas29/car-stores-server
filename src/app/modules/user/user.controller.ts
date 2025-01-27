@@ -20,6 +20,38 @@ const registerUserController = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async(req,res)=>{
+
+  const query = req.query
+
+  const result = await UserServices.getAllUsers(query)
+
+
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users fetched successfully",
+    meta: result.meta,
+    data: result.result,
+  });
+})
+
+const getMe = catchAsync(async (req, res) => {
+  const { email, role } = req.user;
+
+  const result = await UserServices.getMe(email, role);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is retrieved successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   registerUserController,
+  getAllUsers,
+  getMe
 };

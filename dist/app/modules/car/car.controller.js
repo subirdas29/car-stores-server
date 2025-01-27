@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarController = void 0;
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const http_status_1 = __importDefault(require("http-status"));
 const car_service_1 = require("./car.service");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
@@ -30,12 +29,14 @@ const createCarController = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 }));
 // Get All CarsController
 const getAllCarController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_service_1.CarServices.allCarsDetails();
+    const query = req.query;
+    const result = yield car_service_1.CarServices.allCarsDetails(query);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Cars fetched successfully",
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 }));
 // Get One CarController

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import httpStatus from 'http-status';
 
 import { CarServices } from './car.service';
@@ -22,12 +22,14 @@ const createCarController = catchAsync(async (req, res) => {
 // Get All CarsController
 const getAllCarController = catchAsync(async (req, res) => {
 
-  const result = await CarServices.allCarsDetails();
+  const query = req.query
+  const result = await CarServices.allCarsDetails(query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Cars fetched successfully",
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

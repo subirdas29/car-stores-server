@@ -1,3 +1,5 @@
+import QueryBuilder from '../../builder/QueryBuilder';
+import { carSearchableFields } from './car.constant';
 import { TCar } from './car.interface';
 import { Car } from './car.model';
 
@@ -8,9 +10,21 @@ const createCar = async (carData: TCar) => {
 };
 
 // Get All Cars
-const allCarsDetails = async () => {
-  const result = await Car.find();
-  return result;
+const allCarsDetails = async (query:Record<string,unknown>) => {
+
+  const carQuery = new QueryBuilder(Car.find(),query)
+  .filter()
+  .sort()
+  .paginate()
+  .fields()
+  .search(carSearchableFields)
+
+  const result = await carQuery.modelQuery
+  const meta = await carQuery.countTotal()
+  return {
+    result,
+    meta
+  };
 };
 
 // Get a Specific Car

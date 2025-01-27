@@ -8,9 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const car_model_1 = require("../car/car.model");
+const order_constant_1 = require("./order.constant");
 const order_model_1 = require("./order.model");
 const orderACar = (orderData) => __awaiter(void 0, void 0, void 0, function* () {
     yield car_model_1.Car.updateCar(orderData.car, orderData.quantity);
@@ -18,13 +24,22 @@ const orderACar = (orderData) => __awaiter(void 0, void 0, void 0, function* () 
     return result;
 });
 // Get All Orders
-const allOrdersDetails = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_model_1.Car.find();
-    return result;
+const allOrdersDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const orderQuery = new QueryBuilder_1.default(order_model_1.Order.find(), query).filter()
+        .sort()
+        .paginate()
+        .fields()
+        .search(order_constant_1.orderSearchableFields);
+    const result = yield orderQuery.modelQuery;
+    const meta = yield orderQuery.countTotal();
+    return {
+        result,
+        meta
+    };
 });
 // Get a Specific Order
 const oneOrderDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_model_1.Car.findById(id);
+    const result = yield order_model_1.Order.findById(id);
     return result;
 });
 const orderRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
