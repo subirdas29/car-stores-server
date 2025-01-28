@@ -36,7 +36,7 @@ const getAllCarController = catchAsync(async (req, res) => {
 // Get One CarController
 const oneCarDetailsController =
 catchAsync(async (req, res) => {
-  const carId = req.params.carId;
+  const carId = req.params.carId|| req.body._id;
   const result = await CarServices.oneCarDetails(carId);
   sendResponse(res, {
     statusCode: httpStatus.OK,

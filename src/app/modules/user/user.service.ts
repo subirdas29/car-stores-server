@@ -28,10 +28,6 @@ const getAllUsers = async (query:Record<string,unknown>) => {
 };
 
 const getMyOrder = async (email:string,query:Record<string,unknown>) => {
-
-
-
-
   const userQuery = new QueryBuilder(Order.find({email:email}).populate('car'),query)
   .filter()
   .sort()

@@ -41,7 +41,7 @@ const getAllCarController = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 }));
 // Get One CarController
 const oneCarDetailsController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const carId = req.params.carId;
+    const carId = req.params.carId || req.body._id;
     const result = yield car_service_1.CarServices.oneCarDetails(carId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

@@ -21,10 +21,6 @@ const carSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    year: {
-        type: Number,
-        required: true,
-    },
     price: {
         type: Number,
         required: true,

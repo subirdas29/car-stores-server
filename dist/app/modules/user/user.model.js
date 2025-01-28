@@ -16,16 +16,6 @@ exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../../config"));
-const myOrderSchema = new mongoose_1.Schema({
-    orders: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Order', //eta nijer 7e nijer ref hyse
-    },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    },
-});
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -45,7 +35,6 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: 'user',
     },
-    myorder: [myOrderSchema],
     isDeleted: {
         type: Boolean,
         default: false,

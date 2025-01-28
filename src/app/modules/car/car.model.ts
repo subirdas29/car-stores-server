@@ -15,11 +15,7 @@ const carSchema = new Schema<TCar, CarModel>(
       required: true,
      
     },
-    year: {
-      type: Number,
-      required: true,
-      
-    },
+  
     price: {
       type: Number,
       required: true,

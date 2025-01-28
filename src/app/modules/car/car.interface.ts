@@ -5,7 +5,6 @@ export type TCategory = 'Sedan' | 'SUV' | 'Truck' | 'Coupe' | 'Convertible'
 export type TCar = {
   brand: string;
   model: string;
-  year: number;
   price: number;
   category: TCategory;
   description: string;

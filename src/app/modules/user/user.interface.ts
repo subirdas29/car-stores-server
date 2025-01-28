@@ -11,7 +11,6 @@ export type TUser = {
   email: string;
   password: string;
   role: string;
-  myorder:[TMyOrders];
   status: 'active' | 'deactivate';
   isDeleted?: boolean;
   createdAt?: Date;
