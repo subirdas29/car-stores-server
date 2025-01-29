@@ -19,11 +19,21 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const http_status_1 = __importDefault(require("http-status"));
 // Create Order Controller
 const createOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_service_1.OrderServices.orderACar(req.body);
+    const { email } = req.user;
+    const result = yield order_service_1.OrderServices.orderACar(email, req.body, req.ip);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
-        message: 'Order is created successfully',
+        message: 'Order placed successfully',
+        data: result,
+    });
+}));
+const verifyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.OrderServices.verifyPayment(req.query.order_id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: 'Order verified successfully',
         data: result,
     });
 }));
@@ -62,6 +72,7 @@ const ordersRevenueController = (0, catchAsync_1.default)((req, res) => __awaite
 }));
 exports.OrderController = {
     createOrderController,
+    verifyPayment,
     ordersRevenueController,
     getAllOrderController,
     oneOrderDetailsController

@@ -13,6 +13,9 @@ export type TUser = {
   role: string;
   status: 'active' | 'deactivate';
   isDeleted?: boolean;
+  phone?: string;
+  address?: string;
+  city?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };

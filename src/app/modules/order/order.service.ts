@@ -10,25 +10,106 @@ import { User } from '../user/user.model';
 import { orderSearchableFields } from './order.constant';
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
+import { TUser } from '../user/user.interface';
 
-const orderACar = async (orderData: TOrder,) => {
-  const user = await User.findOne({email:orderData.email})
+import { Car } from '../car/car.model';
+import { orderUtils } from './order.utils';
 
-  if(!user){
-    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !')
-  }
+const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
 
-  if(user?.status === 'deactivate'){
+  const user:TUser= (await User.findOne({email:email}))!
+
+
+ 
+
+  if(user.status === 'deactivate'){
     throw new AppError(httpStatus.BAD_REQUEST, 'Your Account is Deactivate by admin!')
   }
 
   if(user?.isDeleted === true){
     throw new AppError(httpStatus.BAD_REQUEST, 'Your Account is Deleted !')
   }
+ 
 
-  const result = await Order.create(orderData);
-  return result;
+  if (!payload?.cars?.length)
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Order is not specified");
 
+  const cars = payload.cars
+
+  let totalPrice = 0;
+  const carDetails = await Promise.all(
+    cars.map(async (item) => {
+      const car = await Car.findById(item.car);
+      if (car) {
+        const subtotal = car ? (car.price || 0) * item.quantity : 0;
+        totalPrice += subtotal;
+        return item;
+      }
+    })
+  );
+
+  let order = await Order.create({
+    user,
+    cars: carDetails,
+    totalPrice,
+  });
+
+  // payment integration
+  const shurjopayPayload = {
+    amount: totalPrice,
+    order_id: order._id,
+    currency: "BDT",
+    customer_name: user.name,
+    customer_address: user.address,
+    customer_email: user.email,
+    customer_phone: user.phone,
+    customer_city: user.city,
+    client_ip,
+  };
+
+  const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+
+  if (payment?.transactionStatus) {
+    order = await order.updateOne({
+      transaction: {
+        id: payment.sp_order_id,
+        transactionStatus: payment.transactionStatus,
+      },
+    });
+  }
+
+  return payment.checkout_url;
+};
+
+const verifyPayment = async (order_id: string) => {
+  const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
+
+  if (verifiedPayment.length) {
+    await Order.findOneAndUpdate(
+      {
+        "transaction.id": order_id,
+      },
+      {
+        "transaction.bank_status": verifiedPayment[0].bank_status,
+        "transaction.sp_code": verifiedPayment[0].sp_code,
+        "transaction.sp_message": verifiedPayment[0].sp_message,
+        "transaction.transactionStatus": verifiedPayment[0].transaction_status,
+        "transaction.method": verifiedPayment[0].method,
+        "transaction.date_time": verifiedPayment[0].date_time,
+        status:
+          verifiedPayment[0].bank_status == "Success"
+            ? "Paid"
+            : verifiedPayment[0].bank_status == "Failed"
+            ? "Pending"
+            : verifiedPayment[0].bank_status == "Cancel"
+            ? "Cancelled"
+            : "",
+      }
+    );
+  }
+
+  return verifiedPayment;
 };
 
 // Get All Orders
@@ -69,5 +150,6 @@ export const OrderServices = {
   orderACar,
   orderRevenue,
   allOrdersDetails,
-  oneOrderDetails
+  oneOrderDetails,
+  verifyPayment
 };

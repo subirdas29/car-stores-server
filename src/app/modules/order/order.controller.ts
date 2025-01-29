@@ -9,14 +9,28 @@ import httpStatus from 'http-status';
 // Create Order Controller
 const createOrderController = catchAsync(async (req, res) => {
 
-  const result = await OrderServices.orderACar(req.body);
+  const {email} = req.user;
+
+  const result = await OrderServices.orderACar(email,req.body, req.ip!);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
-    message: 'Order is created successfully',
+    message: 'Order placed successfully',
     data: result,
   });
 });
+
+const verifyPayment = catchAsync(async (req, res) => {
+  const result = await OrderServices.verifyPayment(req.query.order_id as string);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Order verified successfully',
+    data: result,
+  });
+});
+
 
 // Get All CarsController
 const getAllOrderController = catchAsync(async (req, res) => {
@@ -63,6 +77,7 @@ const ordersRevenueController =catchAsync(async (req, res) => {
 
 export const OrderController = {
   createOrderController,
+  verifyPayment,
   ordersRevenueController,
   getAllOrderController,
   oneOrderDetailsController

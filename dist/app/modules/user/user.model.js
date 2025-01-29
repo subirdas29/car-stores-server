@@ -16,15 +16,19 @@ exports.User = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../../config"));
+const user_constant_1 = require("./user.constant");
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true,
+        trim: true
     },
     email: {
         type: String,
         required: true,
         unique: true,
+        immutable: true,
+        trim: true,
     },
     password: {
         type: String,
@@ -33,12 +37,15 @@ const userSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        default: 'user',
+        default: user_constant_1.USER_ROLES.user,
     },
     isDeleted: {
         type: Boolean,
         default: false,
     },
+    phone: { type: String, default: "N/A" },
+    address: { type: String, default: "N/A" },
+    city: { type: String, default: "N/A" },
 }, {
     timestamps: true,
 });

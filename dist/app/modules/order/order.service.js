@@ -20,19 +20,79 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../user/user.model");
 const order_constant_1 = require("./order.constant");
 const order_model_1 = require("./order.model");
-const orderACar = (orderData) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: orderData.email });
-    if (!user) {
-        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
-    }
-    if ((user === null || user === void 0 ? void 0 : user.status) === 'deactivate') {
+const car_model_1 = require("../car/car.model");
+const order_utils_1 = require("./order.utils");
+const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const user = (yield user_model_1.User.findOne({ email: email }));
+    if (user.status === 'deactivate') {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Your Account is Deactivate by admin!');
     }
     if ((user === null || user === void 0 ? void 0 : user.isDeleted) === true) {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Your Account is Deleted !');
     }
-    const result = yield order_model_1.Order.create(orderData);
-    return result;
+    if (!((_a = payload === null || payload === void 0 ? void 0 : payload.cars) === null || _a === void 0 ? void 0 : _a.length))
+        throw new AppError_1.default(http_status_1.default.NOT_ACCEPTABLE, "Order is not specified");
+    const cars = payload.cars;
+    let totalPrice = 0;
+    const carDetails = yield Promise.all(cars.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+        const car = yield car_model_1.Car.findById(item.car);
+        if (car) {
+            const subtotal = car ? (car.price || 0) * item.quantity : 0;
+            totalPrice += subtotal;
+            return item;
+        }
+    })));
+    let order = yield order_model_1.Order.create({
+        user,
+        cars: carDetails,
+        totalPrice,
+    });
+    // payment integration
+    const shurjopayPayload = {
+        amount: totalPrice,
+        order_id: order._id,
+        currency: "BDT",
+        customer_name: user.name,
+        customer_address: user.address,
+        customer_email: user.email,
+        customer_phone: user.phone,
+        customer_city: user.city,
+        client_ip,
+    };
+    const payment = yield order_utils_1.orderUtils.makePaymentAsync(shurjopayPayload);
+    if (payment === null || payment === void 0 ? void 0 : payment.transactionStatus) {
+        order = yield order.updateOne({
+            transaction: {
+                id: payment.sp_order_id,
+                transactionStatus: payment.transactionStatus,
+            },
+        });
+    }
+    return payment.checkout_url;
+});
+const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const verifiedPayment = yield order_utils_1.orderUtils.verifyPaymentAsync(order_id);
+    if (verifiedPayment.length) {
+        yield order_model_1.Order.findOneAndUpdate({
+            "transaction.id": order_id,
+        }, {
+            "transaction.bank_status": verifiedPayment[0].bank_status,
+            "transaction.sp_code": verifiedPayment[0].sp_code,
+            "transaction.sp_message": verifiedPayment[0].sp_message,
+            "transaction.transactionStatus": verifiedPayment[0].transaction_status,
+            "transaction.method": verifiedPayment[0].method,
+            "transaction.date_time": verifiedPayment[0].date_time,
+            status: verifiedPayment[0].bank_status == "Success"
+                ? "Paid"
+                : verifiedPayment[0].bank_status == "Failed"
+                    ? "Pending"
+                    : verifiedPayment[0].bank_status == "Cancel"
+                        ? "Cancelled"
+                        : "",
+        });
+    }
+    return verifiedPayment;
 });
 // Get All Orders
 const allOrdersDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,5 +124,6 @@ exports.OrderServices = {
     orderACar,
     orderRevenue,
     allOrdersDetails,
-    oneOrderDetails
+    oneOrderDetails,
+    verifyPayment
 };

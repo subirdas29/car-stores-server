@@ -1,19 +1,36 @@
+import { Types } from 'mongoose';
 import { z } from 'zod';
 
-const orderSchema = z.object({
-  body:z.object({
-    email: z.string().email("Invalid email address"), 
-  car: z.string().optional(),
-  quantity: z
-    .number()
-    .int("Quantity must be an integer")
-    .min(1, "Quantity must be at least 1"), 
-  totalPrice: z.number().min(0, "Total price must be a positive number"), 
-  createdAt: z.date().optional(), 
-  updatedAt: z.date().optional(), 
-  })
-});
+const objectIdSchema = z
+  .string()
+  .refine((val) => Types.ObjectId.isValid(val), { message: "Invalid ObjectId" });
 
+const orderSchema = z.object({
+ body:z.object({
+  user: objectIdSchema,
+  cars: z.array(
+    z.object({
+      car: objectIdSchema,
+      quantity: z.number().int().min(1, "Quantity must be at least 1"),
+    })
+  ),
+  totalPrice: z.number().min(0, "Total price must be a positive number").optional(),
+  status: z.enum(["Pending", "Paid", "Shipped", "Completed", "Cancelled"]),
+  transaction: z.object({
+    id: z.string(),
+    transactionStatus: z.string(),
+    bank_status: z.string(),
+    sp_code: z.string(),
+    sp_message: z.string(),
+    method: z.string(),
+    date_time: z.string().refine((val) => !isNaN(Date.parse(val)), {
+      message: "Invalid date format",
+    }),
+  }),
+  createdAt: z.optional(z.date()),
+  updatedAt: z.optional(z.date()),
+ })
+});
 export const orderValidation = {
     orderSchema
 };
