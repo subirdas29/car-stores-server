@@ -8,12 +8,13 @@ export type TCar = {
   price: number;
   category: TCategory;
   description: string;
-  quantity: number;
+  stock: number;
+  imageUrl?: string;
   isStock?: boolean | 'undefined';
   createdAt?: Date;
   updatedAt?: Date;
 };
 
 export interface CarModel extends Model<TCar> {
-  updateCar(carId: string, quantity: number): Promise<TCar | null>;
+  updateCar(carId: string, stock: number): Promise<TCar | null>;
 }

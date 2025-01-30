@@ -1,7 +1,11 @@
-import { Types } from "mongoose";
+import {  Types } from "mongoose";
 
-export type TOrder = {
+export type TOrder =
+
+// extends Document 
+ {
   user: Types.ObjectId;
+  email:string;
   cars:{
     car: Types.ObjectId;
     quantity:number;

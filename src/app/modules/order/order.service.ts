@@ -19,9 +19,6 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
 
   const user:TUser= (await User.findOne({email:email}))!
 
-
- 
-
   if(user.status === 'deactivate'){
     throw new AppError(httpStatus.BAD_REQUEST, 'Your Account is Deactivate by admin!')
   }
@@ -49,6 +46,7 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
   );
 
   let order = await Order.create({
+    email,
     user,
     cars: carDetails,
     totalPrice,

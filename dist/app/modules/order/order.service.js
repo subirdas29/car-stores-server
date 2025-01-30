@@ -44,6 +44,7 @@ const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 
         }
     })));
     let order = yield order_model_1.Order.create({
+        email,
         user,
         cars: carDetails,
         totalPrice,

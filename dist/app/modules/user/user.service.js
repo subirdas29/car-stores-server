@@ -37,7 +37,12 @@ const getAllUsers = (query) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const getMyOrder = (email, query) => __awaiter(void 0, void 0, void 0, function* () {
-    const userQuery = new QueryBuilder_1.default(order_model_1.Order.find({ email: email }).populate('car'), query)
+    const userQuery = new QueryBuilder_1.default(order_model_1.Order.find({ email: email })
+        .populate({
+        path: "cars.car", // Make sure the field matches your schema
+        model: "Car", // Ensure it matches your Mongoose model name
+        select: "brand model price stock imageUrl", // Only include necessary fields
+    }), query)
         .filter()
         .sort()
         .paginate()
@@ -45,9 +50,10 @@ const getMyOrder = (email, query) => __awaiter(void 0, void 0, void 0, function*
         .search(user_constant_1.userSearchableFields);
     const result = yield userQuery.modelQuery;
     const meta = yield userQuery.countTotal();
+    console.log("Backend Populated Orders:", JSON.stringify(result, null, 2)); // Debug populated response
     return {
         result,
-        meta
+        meta,
     };
 });
 const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {

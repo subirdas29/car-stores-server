@@ -34,10 +34,11 @@ const carSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    quantity: {
+    stock: {
         type: Number,
         required: true
     },
+    imageUrl: { type: String },
     isStock: {
         type: Boolean,
         default: true,
@@ -47,8 +48,8 @@ const carSchema = new mongoose_1.Schema({
 });
 carSchema.pre('findOneAndUpdate', function (next) {
     const update = this.getUpdate();
-    if (update.quantity !== undefined) {
-        if (update.quantity > 0) {
+    if (update.stock !== undefined) {
+        if (update.stock > 0) {
             update.isStock = true;
         }
         else {
@@ -57,17 +58,17 @@ carSchema.pre('findOneAndUpdate', function (next) {
     }
     next();
 });
-carSchema.statics.updateCar = function (carId, quantity) {
+carSchema.statics.updateCar = function (carId, stock) {
     return __awaiter(this, void 0, void 0, function* () {
         const car = yield this.findById(carId);
         if (!car) {
             throw new Error('Car not found');
         }
-        if (car.quantity < quantity) {
+        if (car.stock < stock) {
             throw new Error('Insufficient stock for this car');
         }
-        car.quantity = car.quantity - quantity;
-        if (car.quantity === 0) {
+        car.stock = car.stock - stock;
+        if (car.stock === 0) {
             car.isStock = false;
         }
         yield car.save();

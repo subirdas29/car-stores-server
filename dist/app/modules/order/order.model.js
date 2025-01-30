@@ -9,6 +9,10 @@ const orderSchema = new mongoose_1.Schema({
         ref: "Car",
         required: true,
     },
+    email: {
+        type: String,
+        required: true,
+    },
     cars: [
         {
             car: {

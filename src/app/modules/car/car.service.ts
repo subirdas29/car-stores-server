@@ -1,10 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import QueryBuilder from '../../builder/QueryBuilder';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 import { carSearchableFields } from './car.constant';
 import { TCar } from './car.interface';
 import { Car } from './car.model';
 
 //Create a Car
-const createCar = async (carData: TCar) => {
+const createCar = async (file:any, carData: TCar) => {
+
+  if(file){
+    const imageName = `${carData?.brand}${carData?.model}`;
+    const path = file?.path;
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
+    carData.imageUrl = secure_url;
+  }
+
   const result = await Car.create(carData);
   return result;
 };

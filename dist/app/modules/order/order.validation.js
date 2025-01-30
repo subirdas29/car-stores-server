@@ -9,6 +9,7 @@ const objectIdSchema = zod_1.z
 const orderSchema = zod_1.z.object({
     body: zod_1.z.object({
         user: objectIdSchema,
+        email: zod_1.z.string(),
         cars: zod_1.z.array(zod_1.z.object({
             car: objectIdSchema,
             quantity: zod_1.z.number().int().min(1, "Quantity must be at least 1"),

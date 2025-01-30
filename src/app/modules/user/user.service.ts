@@ -27,21 +27,33 @@ const getAllUsers = async (query:Record<string,unknown>) => {
   };
 };
 
-const getMyOrder = async (email:string,query:Record<string,unknown>) => {
-  const userQuery = new QueryBuilder(Order.find({email:email}).populate('car'),query)
-  .filter()
-  .sort()
-  .paginate()
-  .fields()
-  .search(userSearchableFields)
+const getMyOrder = async (email: string, query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(
+    Order.find({ email: email })
+      .populate({
+        path: "cars.car", // Make sure the field matches your schema
+        model: "Car", // Ensure it matches your Mongoose model name
+        select: "brand model price stock imageUrl", // Only include necessary fields
+      }),
+    query
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .search(userSearchableFields);
 
-  const result = await userQuery.modelQuery
-  const meta = await userQuery.countTotal()
+  const result = await userQuery.modelQuery;
+  const meta = await userQuery.countTotal();
+
+
   return {
     result,
-    meta
+    meta,
   };
 };
+
+
 
 const getMe = async (email: string, role: string) => {
   let result = null;

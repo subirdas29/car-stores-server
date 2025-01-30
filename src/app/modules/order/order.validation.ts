@@ -8,6 +8,7 @@ const objectIdSchema = z
 const orderSchema = z.object({
  body:z.object({
   user: objectIdSchema,
+  email:z.string(),
   cars: z.array(
     z.object({
       car: objectIdSchema,

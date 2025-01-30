@@ -9,8 +9,10 @@ import sendResponse from '../../utils/sendResponse';
 
 // Create a CarController
 const createCarController = catchAsync(async (req, res) => {
+
+ 
   
-  const result = await CarServices.createCar(req.body);
+  const result = await CarServices.createCar(req.file, req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -32,6 +34,7 @@ const getAllCarController = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
+
 
 // Get One CarController
 const oneCarDetailsController =

@@ -30,10 +30,12 @@ const carSchema = new Schema<TCar, CarModel>(
       type: String,
       required: true
     },
-    quantity: {
+    stock: {
       type: Number,
       required: true
     },
+  
+    imageUrl: { type: String },
     isStock: {
       type: Boolean,
       default: true,
@@ -47,8 +49,8 @@ const carSchema = new Schema<TCar, CarModel>(
 carSchema.pre('findOneAndUpdate', function (next) {
   const update = this.getUpdate() as Partial<TCar>;
 
-  if (update.quantity !== undefined) {
-    if (update.quantity > 0) {
+  if (update.stock !== undefined) {
+    if (update.stock > 0) {
       update.isStock = true;
     } else {
       update.isStock = false;
@@ -57,20 +59,20 @@ carSchema.pre('findOneAndUpdate', function (next) {
   next();
 });
 
-carSchema.statics.updateCar = async function (carId: string, quantity: number) {
+carSchema.statics.updateCar = async function (carId: string, stock: number) {
   const car = await this.findById(carId);
 
   if (!car) {
     throw new Error('Car not found');
   }
 
-  if (car.quantity < quantity) {
+  if (car.stock < stock) {
     throw new Error('Insufficient stock for this car');
   }
 
-  car.quantity = car.quantity - quantity;
+  car.stock = car.stock - stock;
 
-  if (car.quantity === 0) {
+  if (car.stock === 0) {
     car.isStock = false;
   }
 

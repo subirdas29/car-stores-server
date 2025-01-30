@@ -12,6 +12,10 @@ const orderSchema = new Schema<TOrder>(
       ref: "Car",
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+    },
     cars: [
       {
         car: {
