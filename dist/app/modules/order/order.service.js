@@ -97,7 +97,11 @@ const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* 
 });
 // Get All Orders
 const allOrdersDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const orderQuery = new QueryBuilder_1.default(order_model_1.Order.find().populate('car'), query).filter()
+    const orderQuery = new QueryBuilder_1.default(order_model_1.Order.find().populate({
+        path: "cars.car", // Make sure the field matches your schema
+        model: "Car", // Ensure it matches your Mongoose model name
+        select: "brand model price stock imageUrl", // Only include 
+    }), query).filter()
         .sort()
         .paginate()
         .fields()

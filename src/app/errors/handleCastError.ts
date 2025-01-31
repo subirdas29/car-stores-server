@@ -6,7 +6,7 @@ const handleCastError = (
 ): TGenericErrorResponse => {
   const statusCode = 400;
 
-  const error: TErrorSources = [
+  const errorSources: TErrorSources = [
     {
       path: err?.path,
       message: err?.message,
@@ -16,7 +16,7 @@ const handleCastError = (
   return {
     statusCode,
     message: 'Invalid ID',
-    error,
+    errorSources,
   };
 };
 

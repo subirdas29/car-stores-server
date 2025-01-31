@@ -6,7 +6,7 @@ const handleDuplicateError = (err) => {
     const match = err.message.match(/"([^"]*)"/);
     const errorMessage = match && match[1];
     const statusCode = 400;
-    const error = [
+    const errorSources = [
         {
             path: '',
             message: `${errorMessage} is already exits`,
@@ -15,7 +15,7 @@ const handleDuplicateError = (err) => {
     return {
         statusCode,
         message: 'Invalid Id',
-        error,
+        errorSources,
     };
 };
 exports.default = handleDuplicateError;

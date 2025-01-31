@@ -11,9 +11,9 @@ const handleCastError_1 = __importDefault(require("../errors/handleCastError"));
 const handleDuplicateError_1 = __importDefault(require("../errors/handleDuplicateError"));
 const AppError_1 = __importDefault(require("../errors/AppError"));
 const globalErrorHandler = (err, req, res, next) => {
-    let statusCode = 400;
+    let statusCode = 500;
     let message = 'Something went wrong!';
-    let error = [
+    let errorSources = [
         {
             path: '',
             message: 'Something Went Wrong',
@@ -23,30 +23,30 @@ const globalErrorHandler = (err, req, res, next) => {
         const simplifiedError = (0, handleZodError_1.default)(err);
         statusCode = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.statusCode;
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
-        error = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.error;
+        errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
     else if ((err === null || err === void 0 ? void 0 : err.name) === 'ValidationError') {
         const simplifiedError = (0, handleValidationError_1.default)(err);
         statusCode = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.statusCode;
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
-        error = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.error;
+        errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
     else if ((err === null || err === void 0 ? void 0 : err.name) === 'CastError') {
         const simplifiedError = (0, handleCastError_1.default)(err);
         statusCode = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.statusCode;
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
-        error = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.error;
+        errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
     else if ((err === null || err === void 0 ? void 0 : err.code) === 11000) {
         const simplifiedError = (0, handleDuplicateError_1.default)(err);
         statusCode = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.statusCode;
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
-        error = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.error;
+        errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
     else if (err instanceof AppError_1.default) {
         statusCode = err === null || err === void 0 ? void 0 : err.statusCode;
         message = err === null || err === void 0 ? void 0 : err.message;
-        error = [
+        errorSources = [
             {
                 path: '',
                 message: err === null || err === void 0 ? void 0 : err.message,
@@ -55,18 +55,19 @@ const globalErrorHandler = (err, req, res, next) => {
     }
     else if (err instanceof Error) {
         message = err === null || err === void 0 ? void 0 : err.message;
-        error = [
+        errorSources = [
             {
                 path: '',
                 message: err === null || err === void 0 ? void 0 : err.message,
             },
         ];
     }
+    //ultimate return
     res.status(statusCode).json({
         success: false,
         message,
-        statusCode,
-        error: { details: error },
+        errorSources,
+        // err,
         stack: config_1.default.NODE_ENV === 'development' ? err === null || err === void 0 ? void 0 : err.stack : null,
     });
 };

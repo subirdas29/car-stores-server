@@ -16,6 +16,7 @@ export type TUser = {
   phone?: string;
   address?: string;
   city?: string;
+  passwordChangedAt?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -26,6 +27,10 @@ export interface UserModel extends Model<TUser> {
     hashPassword: string,
   ): Promise<boolean>;
   isUserExist(email: string): Promise<TUser>;
+  isJWTIssuedBeforePasswordChanged(
+    passwordChangedTimestamp: Date,
+    jwtIssuedTimestamp: number,
+  ): boolean;
 }
 
 export type TUserRole = keyof typeof USER_ROLES;

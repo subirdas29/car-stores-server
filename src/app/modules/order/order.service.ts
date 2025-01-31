@@ -113,7 +113,11 @@ const verifyPayment = async (order_id: string) => {
 // Get All Orders
 const allOrdersDetails = async (query:Record<string,any>) => {
 
-  const orderQuery = new QueryBuilder(Order.find().populate('car'),query).filter()
+  const orderQuery = new QueryBuilder(Order.find().populate({
+    path: "cars.car", // Make sure the field matches your schema
+    model: "Car", // Ensure it matches your Mongoose model name
+    select: "brand model price stock imageUrl", // Only include 
+  }),query).filter()
   .sort()
   .paginate()
   .fields()
@@ -132,6 +136,7 @@ const oneOrderDetails = async (id: string) => {
   const result = await Order.findById(id).populate('car');
   return result;
 };
+
 
 
 

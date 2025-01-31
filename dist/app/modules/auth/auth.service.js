@@ -59,8 +59,6 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.isUserExist(userData === null || userData === void 0 ? void 0 : userData.email);
-    console.log(userData);
-    console.log(user);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
     }

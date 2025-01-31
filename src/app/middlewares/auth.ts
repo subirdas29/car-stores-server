@@ -1,43 +1,68 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
-import config from '../config';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-
 import AppError from '../errors/AppError';
 import httpStatus from 'http-status';
-import { User } from '../modules/user/user.model';
+import config from '../config';
+import { JwtPayload } from 'jsonwebtoken';
 import { TUserRole } from '../modules/user/user.interface';
+import { User } from '../modules/user/user.model';
+import { verifyToken } from '../modules/auth/auth.utils';
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const BearerToken: string = `Bearer ${req.headers.authorization}`;
-    const splitToken: string[] = BearerToken.split(' ');
-    const token = splitToken[1];
+    const token = req.headers.authorization;
 
     if (!token) {
       throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
     }
 
-    const decoded = jwt.verify(
-      token,
-      config.jwt_access_secret as string,
-    ) as JwtPayload;
+    let decoded
+  
+    try{
+       decoded = verifyToken(token, config.jwt_access_secret as string);
+    }
+    catch(err){
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+    }
 
-    const { email, role } = decoded;
+    const { email, role, iat } = decoded;
 
-    const user = await User.findOne({ email });
- 
+    const user = await User.isUserExist(email);
+
     if (!user) {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
     }
 
+    // checking if the user is already deleted
+
+    const isUserDeleted = user?.isDeleted;
+
+    if (isUserDeleted) {
+      throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted');
+    }
+
+    // checking if the user is blocked
+
+    const isUserBlocked = user?.status;
+    if (isUserBlocked === 'blocked') {
+      throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked');
+    }
+
+    if (
+      user.passwordChangedAt &&
+      User.isJWTIssuedBeforePasswordChanged(
+        user.passwordChangedAt,
+        iat as number,
+      )
+    ) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized !');
+    }
     if (requiredRoles && !requiredRoles.includes(role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
     }
 
     req.user = decoded as JwtPayload;
-
-
     next();
   });
 };

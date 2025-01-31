@@ -8,7 +8,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
 
   const errorMessage = match && match[1];
   const statusCode = 400;
-  const error: TErrorSources = [
+  const errorSources: TErrorSources = [
     {
       path: '',
       message: `${errorMessage} is already exits`,
@@ -18,7 +18,7 @@ const handleDuplicateError = (err: any): TGenericErrorResponse => {
   return {
     statusCode,
     message: 'Invalid Id',
-    error,
+    errorSources,
   };
 };
 
