@@ -25,7 +25,7 @@ const order_utils_1 = require("./order.utils");
 const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const user = (yield user_model_1.User.findOne({ email: email }));
-    if (user.status === 'deactivate') {
+    if (user.status === 'blocked') {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Your Account is Deactivate by admin!');
     }
     if ((user === null || user === void 0 ? void 0 : user.isDeleted) === true) {

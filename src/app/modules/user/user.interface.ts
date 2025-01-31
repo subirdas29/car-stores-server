@@ -11,7 +11,7 @@ export type TUser = {
   email: string;
   password: string;
   role: string;
-  status: 'active' | 'deactivate';
+  status: 'in-progress' | 'blocked';
   isDeleted?: boolean;
   phone?: string;
   address?: string;
@@ -25,7 +25,7 @@ export interface UserModel extends Model<TUser> {
     plainTextPassword: string,
     hashPassword: string,
   ): Promise<boolean>;
-  isUserExist(id: string): Promise<TUser>;
+  isUserExist(email: string): Promise<TUser>;
 }
 
 export type TUserRole = keyof typeof USER_ROLES;

@@ -18,13 +18,14 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../user/user.model");
 const auth_utils_1 = require("./auth.utils");
 const config_1 = __importDefault(require("../../config"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.isUserExist(payload.email);
     if (!user) {
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
     }
     if (!(yield user_model_1.User.isThePasswordMatched(payload === null || payload === void 0 ? void 0 : payload.password, user === null || user === void 0 ? void 0 : user.password))) {
-        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'password do not match');
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Wrong Password');
     }
     const jwtPayload = {
         email: user === null || user === void 0 ? void 0 : user.email,
@@ -56,7 +57,33 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         accessToken,
     };
 });
+const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.isUserExist(userData === null || userData === void 0 ? void 0 : userData.email);
+    console.log(userData);
+    console.log(user);
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is not found !');
+    }
+    const isUserBlocked = user === null || user === void 0 ? void 0 : user.status;
+    if (isUserBlocked === 'blocked') {
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'This user is blocked');
+    }
+    if (!(yield user_model_1.User.isThePasswordMatched(payload === null || payload === void 0 ? void 0 : payload.oldPassword, user === null || user === void 0 ? void 0 : user.password))) {
+        throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');
+    }
+    //hash new password
+    const newHashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
+    yield user_model_1.User.findOneAndUpdate({
+        email: userData === null || userData === void 0 ? void 0 : userData.email,
+        role: userData === null || userData === void 0 ? void 0 : userData.role,
+    }, {
+        password: newHashedPassword,
+        passwordChangedAt: new Date(),
+    });
+    return null;
+});
 exports.AuthServices = {
     loginUser,
     refreshToken,
+    changePassword
 };

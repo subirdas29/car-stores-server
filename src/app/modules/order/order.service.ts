@@ -19,7 +19,7 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
 
   const user:TUser= (await User.findOne({email:email}))!
 
-  if(user.status === 'deactivate'){
+  if(user.status === 'blocked'){
     throw new AppError(httpStatus.BAD_REQUEST, 'Your Account is Deactivate by admin!')
   }
 

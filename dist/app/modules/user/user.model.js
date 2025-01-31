@@ -39,6 +39,11 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: user_constant_1.USER_ROLES.user,
     },
+    status: {
+        type: String,
+        enum: user_constant_1.Status,
+        default: 'in-progress',
+    },
     isDeleted: {
         type: Boolean,
         default: false,

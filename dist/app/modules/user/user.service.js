@@ -50,7 +50,6 @@ const getMyOrder = (email, query) => __awaiter(void 0, void 0, void 0, function*
         .search(user_constant_1.userSearchableFields);
     const result = yield userQuery.modelQuery;
     const meta = yield userQuery.countTotal();
-    console.log("Backend Populated Orders:", JSON.stringify(result, null, 2)); // Debug populated response
     return {
         result,
         meta,
