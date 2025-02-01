@@ -17,5 +17,5 @@ router.post('/', sendImageToCloudinary_1.upload.single('file'), (req, res, next)
 router.get('/', car_controller_1.CarController.getAllCarController);
 router.get('/:carId', car_controller_1.CarController.oneCarDetailsController);
 router.put('/:carId', car_controller_1.CarController.carUpdateController);
-router.delete('/:carId', car_controller_1.CarController.deleteCarController);
+router.patch('/:carId', car_controller_1.CarController.deleteCarController);
 exports.CarRoutes = router;

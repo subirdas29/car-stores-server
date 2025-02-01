@@ -34,6 +34,10 @@ const carSchema = new Schema<TCar, CarModel>(
       type: Number,
       required: true
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   
     imageUrl: { type: String },
     isStock: {

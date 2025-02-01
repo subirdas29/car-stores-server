@@ -138,7 +138,12 @@ const oneOrderDetails = async (id: string) => {
 };
 
 
+const deleteOrder = async(orderId:string)=>{
 
+  const result = await Order.findByIdAndDelete(orderId)
+  return result
+
+}
 
 
 const orderRevenue = async () => {
@@ -154,5 +159,6 @@ export const OrderServices = {
   orderRevenue,
   allOrdersDetails,
   oneOrderDetails,
-  verifyPayment
+  verifyPayment,
+  deleteOrder
 };

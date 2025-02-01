@@ -60,7 +60,18 @@ catchAsync(async (req, res) => {
 });
 
 
+const deleteOrder =catchAsync(async (req, res) => {
 
+  const {orderId} = req.params
+
+  const result = await OrderServices.deleteOrder(orderId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order cancelled successfully',
+    data: result,
+  });
+});
 
 
 
@@ -83,5 +94,6 @@ export const OrderController = {
   verifyPayment,
   ordersRevenueController,
   getAllOrderController,
-  oneOrderDetailsController
+  oneOrderDetailsController,
+  deleteOrder
 };

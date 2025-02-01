@@ -65,8 +65,8 @@ class QueryBuilder<T> {
   }
 
   async countTotal(){
-    const totalQuery = this.modelQuery.getFilter() //joto rokom er query kora hobe ta ekhane cole asbe , page-limit bade searchTearm asbe
-    const total = await this.modelQuery.model.countDocuments(totalQuery);//Db te total document dekhabe
+    const totalQuery = this.modelQuery.getFilter() 
+    const total = await this.modelQuery.model.countDocuments(totalQuery);
     const page = Number(this?.query?.page) || 1;
     const limit = Number(this?.query?.limit) || 10;
     const totalPage = Math.ceil(total/limit)

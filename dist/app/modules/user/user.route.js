@@ -15,4 +15,6 @@ router.post('/register', (0, validateRequest_1.default)(user_validation_1.userVa
 router.get('/all-users', user_controller_1.UserController.getAllUsers);
 router.get('/me', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), user_controller_1.UserController.getMe);
 router.get('/my-order', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), user_controller_1.UserController.getMyOrder);
+router.patch('/block-user/:userId', user_controller_1.UserController.blockUser);
+router.patch('/unblock-user/:userId', user_controller_1.UserController.unblockUser);
 exports.UserRoutes = router;

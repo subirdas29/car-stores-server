@@ -11,13 +11,14 @@ router.post('/',auth(USER_ROLES.user),
 // validationRequest(orderValidation.orderSchema),
  OrderController.createOrderController);
 
-router.get("/verify", auth(USER_ROLES.user), OrderController.verifyPayment);
+router.get("/verify", OrderController.verifyPayment);
 
 router.get('/', OrderController.getAllOrderController);
 
 router.get('/:orderId', OrderController.oneOrderDetailsController);
 
 
+router.delete('/:orderId',OrderController.deleteOrder)
 
 router.get('/revenue', OrderController.ordersRevenueController);
 

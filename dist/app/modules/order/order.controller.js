@@ -61,6 +61,16 @@ const oneOrderDetailsController = (0, catchAsync_1.default)((req, res) => __awai
         data: result,
     });
 }));
+const deleteOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderId } = req.params;
+    const result = yield order_service_1.OrderServices.deleteOrder(orderId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Order cancelled successfully',
+        data: result,
+    });
+}));
 // Calculate Revenue Controller
 const ordersRevenueController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_service_1.OrderServices.orderRevenue();
@@ -76,5 +86,6 @@ exports.OrderController = {
     verifyPayment,
     ordersRevenueController,
     getAllOrderController,
-    oneOrderDetailsController
+    oneOrderDetailsController,
+    deleteOrder
 };

@@ -24,6 +24,8 @@ const getAllUsers = catchAsync(async(req,res)=>{
 
   const query = req.query
 
+
+
   const result = await UserServices.getAllUsers(query)
 
 
@@ -67,6 +69,35 @@ const getMe = catchAsync(async (req, res) => {
 });
 
 
+const blockUser = catchAsync(async (req, res) => {
+  
+  const {userId} = req.params
+
+
+  const result = await UserServices.blockUser(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is blocked successfully',
+    data: result,
+  });
+});
+
+const unblockUser = catchAsync(async (req, res) => {
+  
+  const {userId} = req.params
+
+
+  const result = await UserServices.unblockUser(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User is unblocked successfully',
+    data: result,
+  });
+});
 
 
 
@@ -74,5 +105,7 @@ export const UserController = {
   registerUserController,
   getAllUsers,
   getMyOrder,
-  getMe
+  getMe,
+  blockUser,
+  unblockUser
 };

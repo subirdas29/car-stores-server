@@ -3,6 +3,9 @@ import { Order } from '../order/order.model';
 import { userSearchableFields } from './user.constant';
 import { TUser } from './user.interface';
 import { User } from './user.model';
+import httpStatus from 'http-status';
+
+import AppError from '../../errors/AppError';
 
 const registerUser = async (payload: TUser) => {
   const result = await User.create(payload);
@@ -11,6 +14,9 @@ const registerUser = async (payload: TUser) => {
 
 // Get All Cars
 const getAllUsers = async (query:Record<string,unknown>) => {
+
+
+  
 
   const userQuery = new QueryBuilder(User.find(),query)
   .filter()
@@ -70,8 +76,53 @@ const getMe = async (email: string, role: string) => {
 };
 
 
+const blockUser = async(userId:string)=>{
+
+  const user = await User.findById(userId) as TUser
+
+  if(user.role==='admin'){
+    throw new AppError(httpStatus.BAD_REQUEST, 'you are admin!')
+  }
+
+  if(user.status === 'blocked'){
+    throw new AppError(httpStatus.BAD_REQUEST, 'User Already Blocked!')
+  }
+
+  const result = await User.findByIdAndUpdate(userId,
+    {
+      status:'blocked'
+    },
+    {
+      new:true
+    }
+  )
+ 
+  return result
+}
+const unblockUser = async(userId:string)=>{
+
+  const user = await User.findById(userId) as TUser
+
+  if(user.role==='admin'){
+    throw new AppError(httpStatus.BAD_REQUEST, 'you are admin!')
+  }
+
+  const result = await User.findByIdAndUpdate(userId,
+    {
+      status:'in-progress'
+    },
+    {
+      new:true
+    }
+  )
+ 
+  return result
+}
+
 export const UserServices = {
   registerUser,
   getAllUsers,
-  getMe,getMyOrder
+  getMe,getMyOrder,
+  blockUser,
+  unblockUser
 };

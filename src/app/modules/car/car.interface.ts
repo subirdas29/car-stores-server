@@ -11,6 +11,7 @@ export type TCar = {
   stock: number;
   imageUrl?: string;
   isStock?: boolean | 'undefined';
+  isDeleted?:boolean;
   createdAt?: Date;
   updatedAt?: Date;
 };

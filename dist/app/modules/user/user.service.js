@@ -17,6 +17,8 @@ const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const order_model_1 = require("../order/order.model");
 const user_constant_1 = require("./user.constant");
 const user_model_1 = require("./user.model");
+const http_status_1 = __importDefault(require("http-status"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.create(payload);
     return result;
@@ -65,8 +67,37 @@ const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const blockUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId);
+    if (user.role === 'admin') {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'you are admin!');
+    }
+    if (user.status === 'blocked') {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'User Already Blocked!');
+    }
+    const result = yield user_model_1.User.findByIdAndUpdate(userId, {
+        status: 'blocked'
+    }, {
+        new: true
+    });
+    return result;
+});
+const unblockUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId);
+    if (user.role === 'admin') {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'you are admin!');
+    }
+    const result = yield user_model_1.User.findByIdAndUpdate(userId, {
+        status: 'in-progress'
+    }, {
+        new: true
+    });
+    return result;
+});
 exports.UserServices = {
     registerUser,
     getAllUsers,
-    getMe, getMyOrder
+    getMe, getMyOrder,
+    blockUser,
+    unblockUser
 };

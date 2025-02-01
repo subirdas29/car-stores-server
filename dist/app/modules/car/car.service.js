@@ -64,10 +64,15 @@ const carUpdate = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Delete a Car
 const carDelete = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield car_model_1.Car.findByIdAndDelete(id);
-    if (!result) {
+    const carId = yield car_model_1.Car.findByIdAndUpdate(id, {
+        isDeleted: 'true'
+    }, {
+        new: true
+    });
+    if (!carId) {
         throw { name: 'NotFoundError', message: 'Car not found' };
     }
+    const result = yield car_model_1.Car.findByIdAndDelete(id);
     return result;
 });
 exports.CarServices = {

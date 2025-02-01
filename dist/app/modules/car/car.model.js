@@ -38,6 +38,10 @@ const carSchema = new mongoose_1.Schema({
         type: Number,
         required: true
     },
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
     imageUrl: { type: String },
     isStock: {
         type: Boolean,

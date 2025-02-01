@@ -59,10 +59,21 @@ const carUpdate = async (id: string, data: Partial<TCar>) => {
 
 // Delete a Car
 const carDelete = async (id: string) => {
-  const result = await Car.findByIdAndDelete(id);
-  if (!result) {
+
+  const carId = await Car.findByIdAndUpdate(id,
+    {
+      isDeleted:'true'
+    },
+    {
+      new:true
+    }
+  )
+
+  if (!carId) {
     throw { name: 'NotFoundError', message: 'Car not found' };
   }
+  const result = await Car.findByIdAndDelete(id);
+ 
   return result;
 };
 

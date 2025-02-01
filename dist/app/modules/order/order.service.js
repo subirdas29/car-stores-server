@@ -118,6 +118,10 @@ const oneOrderDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_model_1.Order.findById(id).populate('car');
     return result;
 });
+const deleteOrder = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.findByIdAndDelete(orderId);
+    return result;
+});
 const orderRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_model_1.Order.aggregate([
         { $group: { _id: '$Order._id', totalRevenue: { $sum: '$totalPrice' } } },
@@ -130,5 +134,6 @@ exports.OrderServices = {
     orderRevenue,
     allOrdersDetails,
     oneOrderDetails,
-    verifyPayment
+    verifyPayment,
+    deleteOrder
 };

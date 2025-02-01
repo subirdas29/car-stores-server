@@ -57,8 +57,8 @@ class QueryBuilder {
     countTotal() {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
-            const totalQuery = this.modelQuery.getFilter(); //joto rokom er query kora hobe ta ekhane cole asbe , page-limit bade searchTearm asbe
-            const total = yield this.modelQuery.model.countDocuments(totalQuery); //Db te total document dekhabe
+            const totalQuery = this.modelQuery.getFilter();
+            const total = yield this.modelQuery.model.countDocuments(totalQuery);
             const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) || 1;
             const limit = Number((_b = this === null || this === void 0 ? void 0 : this.query) === null || _b === void 0 ? void 0 : _b.limit) || 10;
             const totalPage = Math.ceil(total / limit);

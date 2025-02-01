@@ -30,6 +30,15 @@ router.get(
   UserController.getMyOrder,
 )
 
+router.patch(
+  '/block-user/:userId',
+  UserController.blockUser,
+)
+router.patch(
+  '/unblock-user/:userId',
+  UserController.unblockUser,
+)
+
 
 
 export const UserRoutes = router;

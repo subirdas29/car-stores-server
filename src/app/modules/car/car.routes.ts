@@ -21,6 +21,6 @@ router.get('/:carId', CarController.oneCarDetailsController);
 
 router.put('/:carId', CarController.carUpdateController);
 
-router.delete('/:carId', CarController.deleteCarController);
+router.patch('/:carId', CarController.deleteCarController);
 
 export const CarRoutes = router;
