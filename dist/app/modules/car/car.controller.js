@@ -63,8 +63,8 @@ const carUpdateController = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 // Delete CarController
-const deleteCarController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const carId = req.params.carId;
+const carDeleteController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { carId } = req.params;
     const result = yield car_service_1.CarServices.carDelete(carId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -78,5 +78,5 @@ exports.CarController = {
     getAllCarController,
     oneCarDetailsController,
     carUpdateController,
-    deleteCarController,
+    carDeleteController,
 };

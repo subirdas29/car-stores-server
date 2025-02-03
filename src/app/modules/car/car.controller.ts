@@ -66,10 +66,10 @@ const carUpdateController = catchAsync(async (req, res) => {
 
 
 // Delete CarController
-const deleteCarController = 
+const carDeleteController = 
 
 catchAsync(async (req, res) => {
-  const carId = req.params.carId;
+  const {carId} = req.params;
   
   const result = await CarServices.carDelete(carId);
   sendResponse(res, {
@@ -85,5 +85,5 @@ export const CarController = {
   getAllCarController,
   oneCarDetailsController,
   carUpdateController,
-  deleteCarController,
+  carDeleteController,
 };

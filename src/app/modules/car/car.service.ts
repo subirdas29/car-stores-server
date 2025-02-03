@@ -20,22 +20,26 @@ const createCar = async (file:any, carData: TCar) => {
 };
 
 // Get All Cars
-const allCarsDetails = async (query:Record<string,unknown>) => {
+const allCarsDetails = async (query: Record<string, unknown>) => {
+  const carQuery = new QueryBuilder(
+    Car.find({ isDeleted: { $ne: true } }), 
+    query
+  )
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .search(carSearchableFields);
 
-  const carQuery = new QueryBuilder(Car.find(),query)
-  .filter()
-  .sort()
-  .paginate()
-  .fields()
-  .search(carSearchableFields)
+  const result = await carQuery.modelQuery;
+  const meta = await carQuery.countTotal();
 
-  const result = await carQuery.modelQuery
-  const meta = await carQuery.countTotal()
   return {
     result,
-    meta
+    meta,
   };
 };
+
 
 // Get a Specific Car
 const oneCarDetails = async (id: string) => {
@@ -60,7 +64,13 @@ const carUpdate = async (id: string, data: Partial<TCar>) => {
 // Delete a Car
 const carDelete = async (id: string) => {
 
-  const carId = await Car.findByIdAndUpdate(id,
+  const carId = await Car.findById(id)
+
+  if (!carId) {
+    throw { name: 'NotFoundError', message: 'Car not found' };
+  }
+
+  const result = await Car.findByIdAndUpdate(id,
     {
       isDeleted:'true'
     },
@@ -68,11 +78,6 @@ const carDelete = async (id: string) => {
       new:true
     }
   )
-
-  if (!carId) {
-    throw { name: 'NotFoundError', message: 'Car not found' };
-  }
-  const result = await Car.findByIdAndDelete(id);
  
   return result;
 };

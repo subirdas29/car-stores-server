@@ -57,6 +57,13 @@ const getMyOrder = (email, query) => __awaiter(void 0, void 0, void 0, function*
         meta,
     };
 });
+const getAUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findById(id);
+    if (!result) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User not Found');
+    }
+    return result;
+});
 const getMe = (email, role) => __awaiter(void 0, void 0, void 0, function* () {
     let result = null;
     if (role === 'admin') {
@@ -94,10 +101,28 @@ const unblockUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
+const profileData = (email, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findOne({ email });
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User Not Found!');
+    }
+    if (user.isDeleted === true) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Your Account is Deleted!');
+    }
+    if (user.status === 'blocked') {
+        throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Your Account is Blocked By Admin. So You cannot update your profile');
+    }
+    const result = yield user_model_1.User.findOneAndUpdate({ email }, data, {
+        new: true,
+    });
+    return result;
+});
 exports.UserServices = {
     registerUser,
     getAllUsers,
     getMe, getMyOrder,
+    getAUser,
     blockUser,
-    unblockUser
+    unblockUser,
+    profileData
 };

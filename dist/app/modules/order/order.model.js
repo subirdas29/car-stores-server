@@ -47,12 +47,4 @@ const orderSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-// Pre-save hook for calculating total price
-// orderSchema.pre('save', function (next) {
-//   if (this.quantity > 0 && this.totalPrice > 0) {
-//     this.totalPrice = this.quantity * this.totalPrice;
-//   }
-//   next();
-// });
-// Export the model
 exports.Order = (0, mongoose_1.model)('Order', orderSchema);

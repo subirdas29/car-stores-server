@@ -19,6 +19,11 @@ router.get(
 );
 
 router.get(
+  '/:userId',
+  UserController.getAUser,
+);
+
+router.get(
   '/me',
   auth( USER_ROLES.admin, USER_ROLES.user),
   UserController.getMe,
@@ -39,6 +44,11 @@ router.patch(
   UserController.unblockUser,
 )
 
+router.put(
+  '/profile-data',
+  auth( USER_ROLES.admin, USER_ROLES.user),
+  UserController.profileData,
+)
 
 
 export const UserRoutes = router;

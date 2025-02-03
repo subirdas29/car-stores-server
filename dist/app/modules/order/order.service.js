@@ -37,11 +37,15 @@ const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 
     let totalPrice = 0;
     const carDetails = yield Promise.all(cars.map((item) => __awaiter(void 0, void 0, void 0, function* () {
         const car = yield car_model_1.Car.findById(item.car);
-        if (car) {
-            const subtotal = car ? (car.price || 0) * item.quantity : 0;
-            totalPrice += subtotal;
-            return item;
+        if (!car) {
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, "Car Not Found");
         }
+        if (car.stock === 0) {
+            throw new AppError_1.default(http_status_1.default.NOT_ACCEPTABLE, "Sorry, the car you selected is currently out of stock. Please choose another car or check back later.");
+        }
+        const subtotal = car ? (car.price || 0) * item.quantity : 0;
+        totalPrice += subtotal;
+        return item;
     })));
     let order = yield order_model_1.Order.create({
         email,
@@ -75,9 +79,12 @@ const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 
 const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* () {
     const verifiedPayment = yield order_utils_1.orderUtils.verifyPaymentAsync(order_id);
     if (verifiedPayment.length) {
-        yield order_model_1.Order.findOneAndUpdate({
-            "transaction.id": order_id,
-        }, {
+        const order = yield order_model_1.Order.findOne({ "transaction.id": order_id });
+        if (!order) {
+            throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Order not found');
+        }
+        // Update the order status and transaction details
+        yield order_model_1.Order.findOneAndUpdate({ "transaction.id": order_id }, {
             "transaction.bank_status": verifiedPayment[0].bank_status,
             "transaction.sp_code": verifiedPayment[0].sp_code,
             "transaction.sp_message": verifiedPayment[0].sp_message,
@@ -92,6 +99,17 @@ const verifyPayment = (order_id) => __awaiter(void 0, void 0, void 0, function* 
                         ? "Cancelled"
                         : "",
         });
+        // Update car stock if the payment is successful
+        if (verifiedPayment[0].bank_status === 'Success') {
+            for (const item of order.cars) {
+                const car = yield car_model_1.Car.findById(item.car);
+                if (car) {
+                    const newStock = Math.max(car.stock - item.quantity, 0);
+                    car.stock = newStock;
+                    yield car.save();
+                }
+            }
+        }
     }
     return verifiedPayment;
 });

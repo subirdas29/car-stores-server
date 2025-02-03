@@ -31,7 +31,7 @@ const createCar = (file, carData) => __awaiter(void 0, void 0, void 0, function*
 });
 // Get All Cars
 const allCarsDetails = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const carQuery = new QueryBuilder_1.default(car_model_1.Car.find(), query)
+    const carQuery = new QueryBuilder_1.default(car_model_1.Car.find({ isDeleted: { $ne: true } }), query)
         .filter()
         .sort()
         .paginate()
@@ -41,7 +41,7 @@ const allCarsDetails = (query) => __awaiter(void 0, void 0, void 0, function* ()
     const meta = yield carQuery.countTotal();
     return {
         result,
-        meta
+        meta,
     };
 });
 // Get a Specific Car
@@ -64,15 +64,15 @@ const carUpdate = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Delete a Car
 const carDelete = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const carId = yield car_model_1.Car.findByIdAndUpdate(id, {
+    const carId = yield car_model_1.Car.findById(id);
+    if (!carId) {
+        throw { name: 'NotFoundError', message: 'Car not found' };
+    }
+    const result = yield car_model_1.Car.findByIdAndUpdate(id, {
         isDeleted: 'true'
     }, {
         new: true
     });
-    if (!carId) {
-        throw { name: 'NotFoundError', message: 'Car not found' };
-    }
-    const result = yield car_model_1.Car.findByIdAndDelete(id);
     return result;
 });
 exports.CarServices = {

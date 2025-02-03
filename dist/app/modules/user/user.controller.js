@@ -54,6 +54,16 @@ const getMyOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result.result,
     });
 }));
+const getAUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserServices.getAUser(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'User is retrieved successfully',
+        data: result,
+    });
+}));
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, role } = req.user;
     const result = yield user_service_1.UserServices.getMe(email, role);
@@ -84,11 +94,24 @@ const unblockUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const profileData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.user;
+    const profileDetails = req.body;
+    const result = yield user_service_1.UserServices.profileData(email, profileDetails);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Profile updated successfully",
+        data: result,
+    });
+}));
 exports.UserController = {
     registerUserController,
     getAllUsers,
     getMyOrder,
+    getAUser,
     getMe,
     blockUser,
-    unblockUser
+    unblockUser,
+    profileData
 };

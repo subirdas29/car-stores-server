@@ -31,17 +31,26 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
   if (!payload?.cars?.length)
     throw new AppError(httpStatus.NOT_ACCEPTABLE, "Order is not specified");
 
+
+
   const cars = payload.cars
 
   let totalPrice = 0;
   const carDetails = await Promise.all(
     cars.map(async (item) => {
       const car = await Car.findById(item.car);
-      if (car) {
+      if(!car){
+        throw new AppError(httpStatus.NOT_FOUND,"Car Not Found")
+      }
+  
+        if(car.stock===0){
+          throw new AppError(httpStatus.NOT_ACCEPTABLE, "Sorry, the car you selected is currently out of stock. Please choose another car or check back later.");
+        }
+
         const subtotal = car ? (car.price || 0) * item.quantity : 0;
         totalPrice += subtotal;
         return item;
-      }
+   
     })
   );
 
@@ -84,10 +93,15 @@ const verifyPayment = async (order_id: string) => {
   const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
 
   if (verifiedPayment.length) {
+    const order = await Order.findOne({ "transaction.id": order_id });
+
+    if (!order) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+    }
+
+    // Update the order status and transaction details
     await Order.findOneAndUpdate(
-      {
-        "transaction.id": order_id,
-      },
+      { "transaction.id": order_id },
       {
         "transaction.bank_status": verifiedPayment[0].bank_status,
         "transaction.sp_code": verifiedPayment[0].sp_code,
@@ -105,6 +119,18 @@ const verifyPayment = async (order_id: string) => {
             : "",
       }
     );
+
+    // Update car stock if the payment is successful
+    if (verifiedPayment[0].bank_status === 'Success') {
+      for (const item of order.cars) {
+        const car = await Car.findById(item.car);
+        if (car) {
+          const newStock = Math.max(car.stock - item.quantity, 0);
+          car.stock = newStock;
+          await car.save();
+        }
+      }
+    }
   }
 
   return verifiedPayment;
