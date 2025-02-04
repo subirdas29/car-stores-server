@@ -8,6 +8,16 @@ const registerValidationSchema = z.object({
   }),
 });
 
+const updateProfileSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+});
+
+
 export const userValidation = {
   registerValidationSchema,
+  updateProfileSchema
 };

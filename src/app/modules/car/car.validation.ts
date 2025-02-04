@@ -16,8 +16,21 @@ const carSchema = z.object({
     updatedAt: z.date().optional(),
   })
 });
+const updateCarSchema = z.object({
+  body:z.object({
+    brand: z.string().optional(),
+    model: z.string().optional(),
+    price: z.number().optional(),
+    category: categoryEnum.optional(),
+    description: z.string().optional(),
+    stock: z.number().optional(),
+    imageUrl: z.string().optional(),
+    isStock: z.boolean().optional(),
+  })
+});
 
 export const CarValidation = {
-   carSchema
+   carSchema,
+   updateCarSchema
   };
   

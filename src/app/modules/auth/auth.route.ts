@@ -17,16 +17,15 @@ router.post(
 
 router.post(
   '/change-password',
-
-  // validateRequest(AuthValidation.changePasswordValidationSchema),
+  auth(USER_ROLES.admin,USER_ROLES.user),
+  validateRequest(AuthValidation.changePasswordValidationSchema),
   auth(USER_ROLES.user),
   AuthControllers.changePassword,
 );
 
 router.post(
   '/refresh-token',
-  
-  //   validateRequest(AuthValidation.refreshTokenValidationSchema),
+    validateRequest(AuthValidation.refreshTokenValidationSchema),
   AuthControllers.refreshToken,
 );
 

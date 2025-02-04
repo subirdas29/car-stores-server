@@ -17,6 +17,19 @@ const carSchema = zod_1.z.object({
         updatedAt: zod_1.z.date().optional(),
     })
 });
+const updateCarSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        brand: zod_1.z.string().optional(),
+        model: zod_1.z.string().optional(),
+        price: zod_1.z.number().optional(),
+        category: car_constant_1.categoryEnum.optional(),
+        description: zod_1.z.string().optional(),
+        stock: zod_1.z.number().optional(),
+        imageUrl: zod_1.z.string().optional(),
+        isStock: zod_1.z.boolean().optional(),
+    })
+});
 exports.CarValidation = {
-    carSchema
+    carSchema,
+    updateCarSchema
 };

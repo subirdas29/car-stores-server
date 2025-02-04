@@ -9,6 +9,14 @@ const registerValidationSchema = zod_1.z.object({
         password: zod_1.z.string({ required_error: 'Password is required' }),
     }),
 });
+const updateProfileSchema = zod_1.z.object({
+    name: zod_1.z.string().optional(),
+    email: zod_1.z.string().optional(),
+    phone: zod_1.z.string().optional(),
+    address: zod_1.z.string().optional(),
+    city: zod_1.z.string().optional(),
+});
 exports.userValidation = {
     registerValidationSchema,
+    updateProfileSchema
 };

@@ -92,7 +92,7 @@ const changePassword = async(userData:JwtPayload,payload:{oldPassword:string;new
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
   }
 
-  //hash new password
+
   const newHashedPassword = await bcrypt.hash(
     payload?.newPassword,
     Number(config.bcrypt_salt_rounds),

@@ -20,7 +20,6 @@ const http_status_1 = __importDefault(require("http-status"));
 // Create Order Controller
 const createOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.user;
-    // console.log(req.body)
     const result = yield order_service_1.OrderServices.orderACar(email, req.body, req.ip);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,

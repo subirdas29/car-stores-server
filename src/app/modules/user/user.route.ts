@@ -15,16 +15,18 @@ router.post(
 
 router.get(
   '/all-users',
+  auth(USER_ROLES.admin),
   UserController.getAllUsers,
 );
 
 router.get(
   '/:userId',
+  auth(USER_ROLES.admin),
   UserController.getAUser,
 );
 
 router.get(
-  '/me',
+  '/me/details',
   auth( USER_ROLES.admin, USER_ROLES.user),
   UserController.getMe,
 );
@@ -37,16 +39,19 @@ router.get(
 
 router.patch(
   '/block-user/:userId',
+  auth(USER_ROLES.admin),
   UserController.blockUser,
 )
 router.patch(
   '/unblock-user/:userId',
+  auth(USER_ROLES.admin),
   UserController.unblockUser,
 )
 
 router.put(
   '/profile-data',
   auth( USER_ROLES.admin, USER_ROLES.user),
+  validationRequest(userValidation.updateProfileSchema),
   UserController.profileData,
 )
 

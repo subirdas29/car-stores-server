@@ -10,7 +10,7 @@ import httpStatus from 'http-status';
 const createOrderController = catchAsync(async (req, res) => {
 
   const {email} = req.user;
-  // console.log(req.body)
+
   const result = await OrderServices.orderACar(email,req.body, req.ip!);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

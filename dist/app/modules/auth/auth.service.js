@@ -69,7 +69,6 @@ const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, 
     if (!(yield user_model_1.User.isThePasswordMatched(payload === null || payload === void 0 ? void 0 : payload.oldPassword, user === null || user === void 0 ? void 0 : user.password))) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');
     }
-    //hash new password
     const newHashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
     yield user_model_1.User.findOneAndUpdate({
         email: userData === null || userData === void 0 ? void 0 : userData.email,
