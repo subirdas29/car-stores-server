@@ -16,7 +16,7 @@ router.post('/', (0, auth_1.default)(user_constant_1.USER_ROLES.admin), sendImag
     req.body = JSON.parse(req.body.data);
     next();
 }, (0, validateRequest_1.default)(car_validation_1.CarValidation.carSchema), car_controller_1.CarController.createCarController);
-router.get('/', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), car_controller_1.CarController.getAllCarController);
+router.get('/', car_controller_1.CarController.getAllCarController);
 router.get('/:carId', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), car_controller_1.CarController.oneCarDetailsController);
 router.put('/:carId', (0, auth_1.default)(user_constant_1.USER_ROLES.admin), (0, validateRequest_1.default)(car_validation_1.CarValidation.updateCarSchema), car_controller_1.CarController.carUpdateController);
 router.patch('/delete/:carId', (0, auth_1.default)(user_constant_1.USER_ROLES.admin), car_controller_1.CarController.carDeleteController);

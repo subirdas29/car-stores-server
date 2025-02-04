@@ -19,7 +19,6 @@ router.post('/',
     validateRequest(CarValidation.carSchema), CarController.createCarController);
 
 router.get('/',
-  auth(USER_ROLES.admin,USER_ROLES.user),
   CarController.getAllCarController);
 
 router.get('/:carId',

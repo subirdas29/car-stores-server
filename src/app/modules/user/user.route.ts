@@ -32,7 +32,7 @@ router.get(
 );
 
 router.get(
-  '/my-order',
+  '/my-order/details',
   auth( USER_ROLES.admin, USER_ROLES.user),
   UserController.getMyOrder,
 )

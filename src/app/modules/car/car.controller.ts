@@ -24,6 +24,8 @@ const createCarController = catchAsync(async (req, res) => {
 // Get All CarsController
 const getAllCarController = catchAsync(async (req, res) => {
 
+
+
   const query = req.query
   const result = await CarServices.allCarsDetails(query);
   sendResponse(res, {
