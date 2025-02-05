@@ -7,7 +7,7 @@ const carSchema = z.object({
     brand: z.string().min(1, "Brand is required"),
     model: z.string().min(1, "Model is required"),
     price: z.number().min(0, "Price must be a positive number"),
-    category: categoryEnum, 
+    category: categoryEnum.optional(), 
     description: z.string().min(10, "Description must be at least 10 characters"),
     stock: z.number().min(0, "Stock cannot be negative"),
     imageUrl: z.string().url("Invalid image URL").optional(),

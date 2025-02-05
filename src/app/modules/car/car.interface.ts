@@ -6,7 +6,7 @@ export type TCar = {
   brand: string;
   model: string;
   price: number;
-  category: TCategory;
+  category?: TCategory;
   description: string;
   stock: number;
   imageUrl?: string;

@@ -10,9 +10,7 @@ import sendResponse from '../../utils/sendResponse';
 // Create a CarController
 const createCarController = catchAsync(async (req, res) => {
 
- 
-  
-  const result = await CarServices.createCar(req.file, req.body);
+  const result = await CarServices.createCar( req.body);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -25,6 +23,7 @@ const createCarController = catchAsync(async (req, res) => {
 const getAllCarController = catchAsync(async (req, res) => {
 
 
+  
 
   const query = req.query
   const result = await CarServices.allCarsDetails(query);
@@ -35,6 +34,7 @@ const getAllCarController = catchAsync(async (req, res) => {
     meta: result.meta,
     data: result.result,
   });
+  
 });
 
 

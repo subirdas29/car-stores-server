@@ -23,7 +23,7 @@ const carSchema = new Schema<TCar, CarModel>(
     },
     category: {
       type: String,
-      required:true,
+      // required:true,
       enum: Category
     },
     description: {
