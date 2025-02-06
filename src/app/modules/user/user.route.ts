@@ -48,7 +48,7 @@ router.patch(
   UserController.unblockUser,
 )
 
-router.put(
+router.patch(
   '/profile-data',
   auth( USER_ROLES.admin, USER_ROLES.user),
   validationRequest(userValidation.updateProfileSchema),

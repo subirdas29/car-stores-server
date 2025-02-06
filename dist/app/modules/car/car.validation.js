@@ -8,7 +8,7 @@ const carSchema = zod_1.z.object({
         brand: zod_1.z.string().min(1, "Brand is required"),
         model: zod_1.z.string().min(1, "Model is required"),
         price: zod_1.z.number().min(0, "Price must be a positive number"),
-        category: car_constant_1.categoryEnum,
+        category: car_constant_1.categoryEnum.optional(),
         description: zod_1.z.string().min(10, "Description must be at least 10 characters"),
         stock: zod_1.z.number().min(0, "Stock cannot be negative"),
         imageUrl: zod_1.z.string().url("Invalid image URL").optional(),

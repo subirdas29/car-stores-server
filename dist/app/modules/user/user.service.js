@@ -112,9 +112,7 @@ const profileData = (email, data) => __awaiter(void 0, void 0, void 0, function*
     if (user.status === 'blocked') {
         throw new AppError_1.default(http_status_1.default.BAD_REQUEST, 'Your Account is Blocked By Admin. So You cannot update your profile');
     }
-    const result = yield user_model_1.User.findOneAndUpdate({ email }, data, {
-        new: true,
-    });
+    const result = yield user_model_1.User.findOneAndUpdate({ email }, data, { new: true });
     return result;
 });
 exports.UserServices = {

@@ -132,6 +132,8 @@ const unblockUser = async(userId:string)=>{
 
 const profileData = async (email: string, data: Partial<TUser>) => {
 
+  
+
   const user = await User.findOne({email})
   
 
@@ -148,9 +150,8 @@ const profileData = async (email: string, data: Partial<TUser>) => {
     throw new AppError(httpStatus.BAD_REQUEST,'Your Account is Blocked By Admin. So You cannot update your profile')
   }
 
-  const result = await User.findOneAndUpdate({email}, data, {
-    new: true,
-  });
+  const result = await User.findOneAndUpdate({email},data, { new: true }
+    );
 
  
   return result;

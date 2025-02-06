@@ -1,45 +1,100 @@
-# Car-Stores-Server
+# Car Hunt Server
 
-A robust and scalable RESTful API built with Node.js, Express.js, TypeScript, and Mongoose. This project provides functionalities for managing a car inventory system, including car creation, updating, ordering, and real-time stock management.
+This is the backend server for **Car Hunt**, a car store application. It provides APIs for managing users, cars, and orders. The server is built using **Node.js**, **Express**, **TypeScript**, and **MongoDB** with a modular architecture.
 
-## Live URL:
 
-https://car-stores-api.vercel.app/
+## 🌍 Live Demo
 
-## Features:
+Client Site: [Visit Car Hunt](https://car-hunt.vercel.app/)
+Server Site: [Visit Car Hunt Api](https://car-stores-api.vercel.app/)
+---
 
-- 🚗 **Car Management**: Create, update, delete, and fetch car data.
-- 📦 **Inventory Tracking**: Manage car stock dynamically based on orders.
-- 💾 **Database Integration**: Uses MongoDB with Mongoose for schema management.
-- 🔧 **Middleware Logic**: Automatic stock status updates (isStock) based on inventory.
-- 📜 **Validation**: Comprehensive input validation with custom error messages.
-- 🌐 **RESTful Design**: Clean, modular, and scalable API architecture.
+## Features
 
-## Technologies Used:
+- **User Management**:
+  - User registration and authentication (JWT-based).
+  - Role-based access control (Admin, User).
+  - Block/unblock users.
+  - Update user profile and change password.
 
-- **Node.js**: JavaScript runtime for server-side applications.
-- **Express.js**: Lightweight web framework for building REST APIs.
-- **TypeScript**: Strongly-typed JavaScript for enhanced development experience.
-- **Mongoose**: MongoDB ODM for schema validation and query building.
-- **ESLint & Prettier**: Code quality and formatting tools.
+- **Car Management**:
+  - Add, update, and delete cars (Admin only).
+  - Fetch all cars or details of a specific car.
 
-## API Endpoints:
+- **Order Management**:
+  - Create and manage orders.
+  - Verify payments.
+  - Fetch revenue statistics.
 
-### Car Routes:
+- **Authentication**:
+  - Login and refresh token.
+  - Password change functionality.
 
-- **POST /api/cars**: Create a new car.
-- **GET /api/cars**: Retrieve all cars.
-- **GET /api/cars/:carId**: Retrieve a single car by ID.
-- **PUT /api/cars/:carId**: Update car details.
-- **DELETE /api/cars/:carId**: Delete a car.
+---
 
-### Order Routes:
+## Technologies Used
 
-- **POST /api/orders**: Place a new car order.Reduces car quantity and updates isStock status automatically.
-- **GET /api/orders/revenue**: Retrieve all orders.
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Database**: MongoDB (with Mongoose)
+- **Authentication**: JSON Web Tokens (JWT)
+- **File Upload**: Multer and Cloudinary
+- **Payment Integration**: ShurjoPay
+- **Validation**: Zod
+- **Linting**: ESLint
+- **Formatting**: Prettier
+- **Environment Variables**: Dotenv
 
-## Best Practices:
+---
 
-- **Error Handling**: Centralized error handling ensures consistent responses.
-- **Validation**: Input validation ensures only valid data is accepted.
-- **Modular Design**: Separation of concerns for scalability and maintainability.
+## Auth Routes
+
+- **POST `/auth/login`**: User login.
+- **POST `/auth/change-password`**: Change user password.
+- **POST `/auth/refresh-token`**: Refresh access token.
+
+---
+
+## User Routes
+
+- **POST `/user/register`**: Register a new user.
+- **GET `/user/all-users`**: Get all users (Admin only).
+- **GET `/user/:userId`**: Get a specific user (Admin only).
+- **GET `/user/me/details`**: Get logged-in user details.
+- **GET `/user/my-order/details`**: Get logged-in user's order details.
+- **PATCH `/user/block-user/:userId`**: Block a user (Admin only).
+- **PATCH `/user/unblock-user/:userId`**: Unblock a user (Admin only).
+- **PATCH `/user/profile-data`**: Update logged-in user's profile.
+
+---
+
+## Car Routes
+
+- **POST `/cars`**: Create a new car (Admin only).
+- **GET `/cars`**: Get all cars.
+- **GET `/cars/:carId`**: Get details of a specific car.
+- **PUT `/cars/:carId`**: Update a car (Admin only).
+- **PATCH `/cars/delete/:carId`**: Soft delete a car (Admin only).
+
+---
+
+## Order Routes
+
+- **POST `/orders`**: Create a new order (User only).
+- **GET `/orders/verify`**: Verify payment.
+- **GET `/orders`**: Get all orders.
+- **GET `/orders/:orderId`**: Get details of a specific order.
+- **DELETE `/orders/:orderId`**: Delete an order.
+- **GET `/orders/revenue`**: Get revenue statistics.
+
+---
+
+## Scripts
+
+- **Start the server**: `npm start`
+- **Start the server in development mode**: `npm run start:dev`
+- **Build the project**: `npm run build`
+- **Lint the code**: `npm run lint`
+- **Fix linting issues**: `npm run lint:fix`
+- **Format the code**: `npm run format`
+- **Fix formatting issues**: `npm run format:fix`

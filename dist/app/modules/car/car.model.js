@@ -27,7 +27,7 @@ const carSchema = new mongoose_1.Schema({
     },
     category: {
         type: String,
-        required: true,
+        // required:true,
         enum: car_constant_1.Category
     },
     description: {

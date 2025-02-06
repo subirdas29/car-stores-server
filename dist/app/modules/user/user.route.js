@@ -18,5 +18,5 @@ router.get('/me/details', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, 
 router.get('/my-order/details', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), user_controller_1.UserController.getMyOrder);
 router.patch('/block-user/:userId', (0, auth_1.default)(user_constant_1.USER_ROLES.admin), user_controller_1.UserController.blockUser);
 router.patch('/unblock-user/:userId', (0, auth_1.default)(user_constant_1.USER_ROLES.admin), user_controller_1.UserController.unblockUser);
-router.put('/profile-data', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), (0, validateRequest_1.default)(user_validation_1.userValidation.updateProfileSchema), user_controller_1.UserController.profileData);
+router.patch('/profile-data', (0, auth_1.default)(user_constant_1.USER_ROLES.admin, user_constant_1.USER_ROLES.user), (0, validateRequest_1.default)(user_validation_1.userValidation.updateProfileSchema), user_controller_1.UserController.profileData);
 exports.UserRoutes = router;

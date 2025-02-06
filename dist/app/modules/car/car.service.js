@@ -13,19 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarServices = void 0;
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
-const sendImageToCloudinary_1 = require("../../utils/sendImageToCloudinary");
+// import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 const car_constant_1 = require("./car.constant");
 const car_model_1 = require("./car.model");
 //Create a Car
-const createCar = (file, carData) => __awaiter(void 0, void 0, void 0, function* () {
-    if (file) {
-        const imageName = `${carData === null || carData === void 0 ? void 0 : carData.brand}${carData === null || carData === void 0 ? void 0 : carData.model}`;
-        const path = file === null || file === void 0 ? void 0 : file.path;
-        const { secure_url } = yield (0, sendImageToCloudinary_1.sendImageToCloudinary)(imageName, path);
-        carData.imageUrl = secure_url;
-    }
+const createCar = (carData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield car_model_1.Car.create(carData);
     return result;
 });
