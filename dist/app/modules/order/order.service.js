@@ -53,6 +53,7 @@ const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 
         cars: carDetails,
         totalPrice,
     });
+    // console.log(order)
     // payment integration
     const shurjopayPayload = {
         amount: totalPrice,
@@ -70,7 +71,7 @@ const orderACar = (email, payload, client_ip) => __awaiter(void 0, void 0, void 
         order = yield order.updateOne({
             transaction: {
                 id: payment.sp_order_id,
-                transactionStatus: payment.transactionStatus,
+                transactionStatus: payment.transactionStatus
             },
         });
     }

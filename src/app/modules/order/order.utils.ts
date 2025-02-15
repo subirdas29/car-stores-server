@@ -12,7 +12,7 @@ shurjopay.config(
   config.sp.sp_return_url!
 );
 
-// console.log(shurjopay);
+
 
 const makePaymentAsync = async (
   paymentPayload: any
@@ -24,6 +24,8 @@ const makePaymentAsync = async (
       (error) => reject(error)
     );
   });
+
+  
 
   //   const paymentResult = await shurjopay.makePayment(
   //     paymentPayload,
@@ -38,6 +40,9 @@ const makePaymentAsync = async (
   //   );
   //   return paymentResult;
 };
+// console.log('makepayment',makePaymentAsync)
+
+
 
 const verifyPaymentAsync = (
   order_id: string
@@ -52,6 +57,7 @@ const verifyPaymentAsync = (
 };
 
 export const orderUtils = {
+
   makePaymentAsync,
   verifyPaymentAsync,
 };

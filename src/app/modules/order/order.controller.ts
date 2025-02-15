@@ -11,7 +11,9 @@ const createOrderController = catchAsync(async (req, res) => {
 
   const {email} = req.user;
 
-  const result = await OrderServices.orderACar(email,req.body, req.ip!);
+  const result = await OrderServices.orderACar(
+    email,
+    req.body, req.ip!);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,

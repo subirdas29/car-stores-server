@@ -8,7 +8,8 @@ import { USER_ROLES } from '../user/user.constant';
 
 const router = express.Router();
 
-router.post('/',auth(USER_ROLES.user), 
+router.post('/',
+    auth(USER_ROLES.user), 
  OrderController.createOrderController);
 
 router.get("/verify", OrderController.verifyPayment);

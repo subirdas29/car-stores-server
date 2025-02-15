@@ -15,7 +15,9 @@ import { TUser } from '../user/user.interface';
 import { Car } from '../car/car.model';
 import { orderUtils } from './order.utils';
 
-const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
+const orderACar = async (
+  email:string,
+  payload:TOrder,client_ip:string) => {
 
   const user:TUser= (await User.findOne({email:email}))!
 
@@ -60,6 +62,7 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
     cars: carDetails,
     totalPrice,
   });
+  // console.log(order)
 
   // payment integration
   const shurjopayPayload = {
@@ -74,16 +77,23 @@ const orderACar = async (email:string,payload:TOrder,client_ip:string) => {
     client_ip,
   };
 
+
+
   const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
 
 
   if (payment?.transactionStatus) {
     order = await order.updateOne({
       transaction: {
         id: payment.sp_order_id,
-        transactionStatus: payment.transactionStatus,
+        transactionStatus: payment.transactionStatus
+        
       },
+     
+      
     });
+ 
   }
 
   return payment.checkout_url;
