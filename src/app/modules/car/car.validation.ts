@@ -10,7 +10,7 @@ const carSchema = z.object({
     category: categoryEnum.optional(), 
     description: z.string().min(10, "Description must be at least 10 characters"),
     stock: z.number().min(0, "Stock cannot be negative"),
-    imageUrl: z.string().url("Invalid image URL").optional(),
+    imageUrls: z.array(z.string().url("Invalid image URL")).optional(),
     isStock: z.boolean().optional(),
     createdAt: z.date().optional(),
     updatedAt: z.date().optional(),
@@ -24,7 +24,7 @@ const updateCarSchema = z.object({
     category: categoryEnum.optional(),
     description: z.string().optional(),
     stock: z.number().optional(),
-    imageUrl: z.string().optional(),
+    imageUrls: z.array(z.string().url("Invalid image URL")).optional(),
     isStock: z.boolean().optional(),
   })
 });

@@ -16,7 +16,6 @@ router.get('/',
   CarController.getAllCarController);
 
 router.get('/:carId',
-  auth(USER_ROLES.admin,USER_ROLES.user),
    CarController.oneCarDetailsController);
 
 router.put('/:carId',

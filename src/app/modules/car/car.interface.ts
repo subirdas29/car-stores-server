@@ -9,7 +9,7 @@ export type TCar = {
   category?: TCategory;
   description: string;
   stock: number;
-  imageUrl?: string;
+  imageUrl?: string[];
   isStock?: boolean | 'undefined';
   isDeleted?:boolean;
   createdAt?: Date;
