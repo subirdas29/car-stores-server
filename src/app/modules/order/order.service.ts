@@ -90,8 +90,6 @@ const orderACar = async (
         transactionStatus: payment.transactionStatus
         
       },
-     
-      
     });
  
   }
