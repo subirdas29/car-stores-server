@@ -13,6 +13,6 @@ router.post('/', (0, auth_1.default)(user_constant_1.USER_ROLES.user), order_con
 router.get("/verify", order_controller_1.OrderController.verifyPayment);
 router.get('/', order_controller_1.OrderController.getAllOrderController);
 router.get('/:orderId', order_controller_1.OrderController.oneOrderDetailsController);
-router.delete('/:orderId', order_controller_1.OrderController.deleteOrder);
+router.delete('/:orderId/:carIdToDelete', order_controller_1.OrderController.deleteOrder);
 router.get('/revenue', order_controller_1.OrderController.ordersRevenueController);
 exports.OrderRoutes = router;

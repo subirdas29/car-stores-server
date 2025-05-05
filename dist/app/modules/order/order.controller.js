@@ -61,8 +61,8 @@ const oneOrderDetailsController = (0, catchAsync_1.default)((req, res) => __awai
     });
 }));
 const deleteOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { orderId } = req.params;
-    const result = yield order_service_1.OrderServices.deleteOrder(orderId);
+    const { orderId, carIdToDelete } = req.params;
+    const result = yield order_service_1.OrderServices.deleteOrder(orderId, carIdToDelete);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,

@@ -172,10 +172,27 @@ const oneOrderDetails = async (id: string) => {
 };
 
 
-const deleteOrder = async(orderId:string)=>{
+const deleteOrder = async(orderId:string,carIdToDelete:string)=>{
 
-  const result = await Order.findByIdAndDelete(orderId)
-  return result
+
+
+  const order = await Order.findById(orderId)
+
+    if(!order){
+      throw new AppError(httpStatus.NOT_FOUND, 'Order Not Found')
+    }
+
+    if(order.cars.length === 1 && order?.cars[0]?._id?.toString() === carIdToDelete)
+    {
+      const result = await Order.findByIdAndDelete(orderId)
+      return result
+    }
+
+    order.cars = order.cars.filter((car)=>car._id?.toString() !== carIdToDelete)
+
+    const result = await order.save()
+  
+    return result
 
 }
 

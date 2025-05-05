@@ -137,8 +137,18 @@ const oneOrderDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield order_model_1.Order.findById(id).populate('car');
     return result;
 });
-const deleteOrder = (orderId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_model_1.Order.findByIdAndDelete(orderId);
+const deleteOrder = (orderId, carIdToDelete) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const order = yield order_model_1.Order.findById(orderId);
+    if (!order) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'Order Not Found');
+    }
+    if (order.cars.length === 1 && ((_b = (_a = order === null || order === void 0 ? void 0 : order.cars[0]) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString()) === carIdToDelete) {
+        const result = yield order_model_1.Order.findByIdAndDelete(orderId);
+        return result;
+    }
+    order.cars = order.cars.filter((car) => { var _a; return ((_a = car._id) === null || _a === void 0 ? void 0 : _a.toString()) !== carIdToDelete; });
+    const result = yield order.save();
     return result;
 });
 const orderRevenue = () => __awaiter(void 0, void 0, void 0, function* () {

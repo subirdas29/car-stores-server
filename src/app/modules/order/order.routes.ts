@@ -19,7 +19,7 @@ router.get('/', OrderController.getAllOrderController);
 router.get('/:orderId', OrderController.oneOrderDetailsController);
 
 
-router.delete('/:orderId',OrderController.deleteOrder)
+router.delete('/:orderId/:carIdToDelete',OrderController.deleteOrder)
 
 router.get('/revenue', OrderController.ordersRevenueController);
 
