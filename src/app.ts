@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'https://car-hunt.vercel.app',
+    origin: 'https://car-hunt-stores.vercel.app',
     // origin: 'http://localhost:5173',
     credentials: true,
   }),

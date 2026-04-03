@@ -1,60 +1,57 @@
 import { model, Schema } from 'mongoose';
-import {  TUser, UserModel } from './user.interface';
-import bcrypt from 'bcrypt';
+import { TUser, UserModel } from './user.interface';
+import bcryptjs from 'bcryptjs';
 import config from '../../config';
 import { Status, USER_ROLES } from './user.constant';
 
+const userSchema = new Schema<TUser, UserModel>(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      immutable: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: 0,
+    },
+    role: {
+      type: String,
+      default: USER_ROLES.user,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: 'in-progress',
+    },
+    passwordChangedAt: {
+      type: Date,
+    },
 
-
-
-const userSchema = new Schema<TUser, UserModel>({
-  name: {
-    type: String,
-    required: true,
-    trim: true
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    phone: { type: String, default: 'N/A' },
+    imageUrl: { type: String },
+    address: { type: String, default: 'N/A' },
+    city: { type: String, default: 'N/A' },
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    immutable: true,
-    trim: true,
+  {
+    timestamps: true,
   },
-  password: {
-    type: String,
-    required: true,
-    select: 0,
-  },
-  role: {
-    type: String,
-    default: USER_ROLES.user,
-  },
-  status: {
-    type: String,
-    enum: Status,
-    default: 'in-progress',
-  },
-  passwordChangedAt: {
-    type: Date,
-  },
-
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
-  phone: { type: String, default: 'N/A' },
-  imageUrl: { type: String},
-  address: { type: String, default: "N/A" },
-  city: { type: String, default: "N/A" },
-
-},
-{
-  timestamps: true,
-},
 );
 
 userSchema.pre('save', async function (next) {
-  this.password = await bcrypt.hash(
+  this.password = await bcryptjs.hash(
     this.password,
     Number(config.bcrypt_salt_rounds),
   );
@@ -74,7 +71,7 @@ userSchema.statics.isThePasswordMatched = async function (
   plainTextPassword,
   hashPassword,
 ) {
-  return await bcrypt.compare(plainTextPassword, hashPassword);
+  return await bcryptjs.compare(plainTextPassword, hashPassword);
 };
 
 userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
@@ -85,6 +82,5 @@ userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
     new Date(passwordChangedTimestamp).getTime() / 1000;
   return passwordChangedTime > jwtIssuedTimestamp;
 };
-
 
 export const User = model<TUser, UserModel>('User', userSchema);

@@ -5,7 +5,7 @@ import { TLoginUser } from './auth.interface';
 import { createToken, verifyToken } from './auth.utils';
 import config from '../../config';
 import { JwtPayload } from 'jsonwebtoken';
-import bcrypt from 'bcrypt'
+import bcryptjs from 'bcryptjs';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await User.isUserExist(payload.email);
@@ -75,9 +75,11 @@ const refreshToken = async (token: string) => {
   };
 };
 
-const changePassword = async(userData:JwtPayload,payload:{oldPassword:string;newPassword:string})=>{
-  const user = await User.isUserExist(userData?.email)
-
+const changePassword = async (
+  userData: JwtPayload,
+  payload: { oldPassword: string; newPassword: string },
+) => {
+  const user = await User.isUserExist(userData?.email);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -87,13 +89,14 @@ const changePassword = async(userData:JwtPayload,payload:{oldPassword:string;new
   if (isUserBlocked === 'blocked') {
     throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked');
   }
-  
-  if (!(await User.isThePasswordMatched(payload?.oldPassword, user?.password))) {
+
+  if (
+    !(await User.isThePasswordMatched(payload?.oldPassword, user?.password))
+  ) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
   }
 
-
-  const newHashedPassword = await bcrypt.hash(
+  const newHashedPassword = await bcryptjs.hash(
     payload?.newPassword,
     Number(config.bcrypt_salt_rounds),
   );
@@ -108,12 +111,11 @@ const changePassword = async(userData:JwtPayload,payload:{oldPassword:string;new
       passwordChangedAt: new Date(),
     },
   );
-  return null
-  
-}
+  return null;
+};
 
 export const AuthServices = {
   loginUser,
   refreshToken,
-  changePassword
+  changePassword,
 };

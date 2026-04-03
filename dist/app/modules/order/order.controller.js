@@ -44,7 +44,7 @@ const getAllOrderController = (0, catchAsync_1.default)((req, res) => __awaiter(
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Orders fetched successfully",
+        message: 'Orders fetched successfully',
         meta: result.meta,
         data: result.result,
     });
@@ -56,12 +56,13 @@ const oneOrderDetailsController = (0, catchAsync_1.default)((req, res) => __awai
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Car fetched successfully",
+        message: 'Car fetched successfully',
         data: result,
     });
 }));
 const deleteOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { orderId, carIdToDelete } = req.params;
+    const orderId = req.params.orderId;
+    const carIdToDelete = req.params.carIdToDelete;
     const result = yield order_service_1.OrderServices.deleteOrder(orderId, carIdToDelete);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -86,5 +87,5 @@ exports.OrderController = {
     ordersRevenueController,
     getAllOrderController,
     oneOrderDetailsController,
-    deleteOrder
+    deleteOrder,
 };

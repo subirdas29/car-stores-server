@@ -20,43 +20,36 @@ const registerUserController = catchAsync(async (req, res) => {
   });
 });
 
-const getAllUsers = catchAsync(async(req,res)=>{
+const getAllUsers = catchAsync(async (req, res) => {
+  const query = req.query;
 
-  const query = req.query
-
-
-
-  const result = await UserServices.getAllUsers(query)
-
-
+  const result = await UserServices.getAllUsers(query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Users fetched successfully",
+    message: 'Users fetched successfully',
     meta: result.meta,
     data: result.result,
   });
-})
-
+});
 
 const getMyOrder = catchAsync(async (req, res) => {
-  const {email} = req.user;
-  const query = req.query
-  const result = await UserServices.getMyOrder(email,query);
+  const { email } = req.user;
+  const query = req.query;
+  const result = await UserServices.getMyOrder(email, query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'My Order is retrieved successfully',
-    meta:result.meta,
+    meta: result.meta,
     data: result.result,
   });
 });
 
-const getAUser =catchAsync(async (req, res) => {
-  
-  const {userId} = req.params 
+const getAUser = catchAsync(async (req, res) => {
+  const userId = req.params.userId as string;
 
   const result = await UserServices.getAUser(userId);
 
@@ -71,7 +64,6 @@ const getAUser =catchAsync(async (req, res) => {
 const getMe = catchAsync(async (req, res) => {
   const { email, role } = req.user;
 
-
   const result = await UserServices.getMe(email, role);
 
   sendResponse(res, {
@@ -82,11 +74,8 @@ const getMe = catchAsync(async (req, res) => {
   });
 });
 
-
 const blockUser = catchAsync(async (req, res) => {
-  
-  const {userId} = req.params
-
+  const userId = req.params.userId as string;
 
   const result = await UserServices.blockUser(userId);
 
@@ -99,9 +88,7 @@ const blockUser = catchAsync(async (req, res) => {
 });
 
 const unblockUser = catchAsync(async (req, res) => {
-  
-  const {userId} = req.params
-
+  const userId = req.params.userId as string;
 
   const result = await UserServices.unblockUser(userId);
 
@@ -113,19 +100,17 @@ const unblockUser = catchAsync(async (req, res) => {
   });
 });
 
-
 const profileData = catchAsync(async (req, res) => {
   const { email } = req.user;
   const profileDetails = req.body;
-  const result = await UserServices.profileData(email,profileDetails);
+  const result = await UserServices.profileData(email, profileDetails);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Profile updated successfully",
+    message: 'Profile updated successfully',
     data: result,
   });
 });
-
 
 export const UserController = {
   registerUserController,
@@ -135,5 +120,5 @@ export const UserController = {
   getMe,
   blockUser,
   unblockUser,
-  profileData
+  profileData,
 };

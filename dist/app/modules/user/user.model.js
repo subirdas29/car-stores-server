@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const mongoose_1 = require("mongoose");
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const config_1 = __importDefault(require("../../config"));
 const user_constant_1 = require("./user.constant");
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
     },
     email: {
         type: String,
@@ -53,14 +53,14 @@ const userSchema = new mongoose_1.Schema({
     },
     phone: { type: String, default: 'N/A' },
     imageUrl: { type: String },
-    address: { type: String, default: "N/A" },
-    city: { type: String, default: "N/A" },
+    address: { type: String, default: 'N/A' },
+    city: { type: String, default: 'N/A' },
 }, {
     timestamps: true,
 });
 userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
-        this.password = yield bcrypt_1.default.hash(this.password, Number(config_1.default.bcrypt_salt_rounds));
+        this.password = yield bcryptjs_1.default.hash(this.password, Number(config_1.default.bcrypt_salt_rounds));
         next();
     });
 });
@@ -77,7 +77,7 @@ userSchema.statics.isUserExist = function (email) {
 };
 userSchema.statics.isThePasswordMatched = function (plainTextPassword, hashPassword) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield bcrypt_1.default.compare(plainTextPassword, hashPassword);
+        return yield bcryptjs_1.default.compare(plainTextPassword, hashPassword);
     });
 };
 userSchema.statics.isJWTIssuedBeforePasswordChanged = function (passwordChangedTimestamp, jwtIssuedTimestamp) {

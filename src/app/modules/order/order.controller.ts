@@ -1,19 +1,13 @@
-
-
 import { OrderServices } from './order.service';
 import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 import httpStatus from 'http-status';
 
-
 // Create Order Controller
 const createOrderController = catchAsync(async (req, res) => {
+  const { email } = req.user;
 
-  const {email} = req.user;
-
-  const result = await OrderServices.orderACar(
-    email,
-    req.body, req.ip!);
+  const result = await OrderServices.orderACar(email, req.body, req.ip!);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -23,7 +17,9 @@ const createOrderController = catchAsync(async (req, res) => {
 });
 
 const verifyPayment = catchAsync(async (req, res) => {
-  const result = await OrderServices.verifyPayment(req.query.order_id as string);
+  const result = await OrderServices.verifyPayment(
+    req.query.order_id as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -33,40 +29,37 @@ const verifyPayment = catchAsync(async (req, res) => {
   });
 });
 
-
 // Get All CarsController
 const getAllOrderController = catchAsync(async (req, res) => {
-  const query = req.query
+  const query = req.query;
 
   const result = await OrderServices.allOrdersDetails(query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Orders fetched successfully",
-    meta:result.meta,
+    message: 'Orders fetched successfully',
+    meta: result.meta,
     data: result.result,
   });
 });
 
 // Get One CarController
-const oneOrderDetailsController =
-catchAsync(async (req, res) => {
-  const orderId = req.params.orderId;
+const oneOrderDetailsController = catchAsync(async (req, res) => {
+  const orderId = req.params.orderId as string;
   const result = await OrderServices.oneOrderDetails(orderId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Car fetched successfully",
+    message: 'Car fetched successfully',
     data: result,
   });
 });
 
+const deleteOrder = catchAsync(async (req, res) => {
+  const orderId = req.params.orderId as string;
+  const carIdToDelete = req.params.carIdToDelete as string;
 
-const deleteOrder =catchAsync(async (req, res) => {
-
-  const {orderId,carIdToDelete} = req.params
-
-  const result = await OrderServices.deleteOrder(orderId,carIdToDelete);
+  const result = await OrderServices.deleteOrder(orderId, carIdToDelete);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -75,11 +68,8 @@ const deleteOrder =catchAsync(async (req, res) => {
   });
 });
 
-
-
 // Calculate Revenue Controller
-const ordersRevenueController =catchAsync(async (req, res) => {
-
+const ordersRevenueController = catchAsync(async (req, res) => {
   const result = await OrderServices.orderRevenue();
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -89,13 +79,11 @@ const ordersRevenueController =catchAsync(async (req, res) => {
   });
 });
 
-
-
 export const OrderController = {
   createOrderController,
   verifyPayment,
   ordersRevenueController,
   getAllOrderController,
   oneOrderDetailsController,
-  deleteOrder
+  deleteOrder,
 };

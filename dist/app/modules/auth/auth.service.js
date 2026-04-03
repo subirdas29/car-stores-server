@@ -18,7 +18,7 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("../user/user.model");
 const auth_utils_1 = require("./auth.utils");
 const config_1 = __importDefault(require("../../config"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.isUserExist(payload.email);
     if (!user) {
@@ -69,7 +69,7 @@ const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, 
     if (!(yield user_model_1.User.isThePasswordMatched(payload === null || payload === void 0 ? void 0 : payload.oldPassword, user === null || user === void 0 ? void 0 : user.password))) {
         throw new AppError_1.default(http_status_1.default.FORBIDDEN, 'Password do not matched');
     }
-    const newHashedPassword = yield bcrypt_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
+    const newHashedPassword = yield bcryptjs_1.default.hash(payload === null || payload === void 0 ? void 0 : payload.newPassword, Number(config_1.default.bcrypt_salt_rounds));
     yield user_model_1.User.findOneAndUpdate({
         email: userData === null || userData === void 0 ? void 0 : userData.email,
         role: userData === null || userData === void 0 ? void 0 : userData.role,
@@ -82,5 +82,5 @@ const changePassword = (userData, payload) => __awaiter(void 0, void 0, void 0, 
 exports.AuthServices = {
     loginUser,
     refreshToken,
-    changePassword
+    changePassword,
 };

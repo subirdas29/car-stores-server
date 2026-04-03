@@ -34,7 +34,7 @@ const getAllCarController = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Cars fetched successfully",
+        message: 'Cars fetched successfully',
         meta: result.meta,
         data: result.result,
     });
@@ -46,7 +46,7 @@ const oneCarDetailsController = (0, catchAsync_1.default)((req, res) => __awaite
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Car fetched successfully",
+        message: 'Car fetched successfully',
         data: result,
     });
 }));
@@ -58,18 +58,18 @@ const carUpdateController = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Car updated successfully",
+        message: 'Car updated successfully',
         data: result,
     });
 }));
 // Delete CarController
 const carDeleteController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { carId } = req.params;
+    const carId = req.params.carId;
     const result = yield car_service_1.CarServices.carDelete(carId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Car deleted successfully",
+        message: 'Car deleted successfully',
         data: result,
     });
 }));

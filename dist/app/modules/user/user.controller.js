@@ -37,7 +37,7 @@ const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Users fetched successfully",
+        message: 'Users fetched successfully',
         meta: result.meta,
         data: result.result,
     });
@@ -55,7 +55,7 @@ const getMyOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getAUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.params;
+    const userId = req.params.userId;
     const result = yield user_service_1.UserServices.getAUser(userId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -75,7 +75,7 @@ const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
     });
 }));
 const blockUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.params;
+    const userId = req.params.userId;
     const result = yield user_service_1.UserServices.blockUser(userId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -85,7 +85,7 @@ const blockUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void
     });
 }));
 const unblockUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.params;
+    const userId = req.params.userId;
     const result = yield user_service_1.UserServices.unblockUser(userId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -101,7 +101,7 @@ const profileData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Profile updated successfully",
+        message: 'Profile updated successfully',
         data: result,
     });
 }));
@@ -113,5 +113,5 @@ exports.UserController = {
     getMe,
     blockUser,
     unblockUser,
-    profileData
+    profileData,
 };
